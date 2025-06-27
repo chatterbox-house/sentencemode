@@ -971,7 +971,6 @@ h2 {
     font-size: 0.9rem;
     color: var(--text-secondary);
 }
-
 /* TTS Speed Control */
 .tts-speed-control {
     position: fixed;
