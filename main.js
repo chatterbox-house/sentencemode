@@ -220,29 +220,28 @@ const appState = {
     }
 };
 
-// Helper functions
-function setupButtonFunctionality() {
-    const settingsBtn = document.getElementById('settings-btn');
-    const closeSettingsBtn = document.getElementById('close-settings');
-    const settingsPanel = document.getElementById('settings-panel');
-    const settingsOverlay = document.getElementById('settings-overlay');
+// Settings toggle functionality
+const settingsBtn = document.getElementById('settings-btn');
+const closeSettingsBtn = document.getElementById('close-settings');
+const settingsPanel = document.getElementById('settings-panel');
+const settingsOverlay = document.getElementById('settings-overlay');
 
-    if (settingsBtn && settingsPanel) {
-        settingsBtn.addEventListener('click', () => {
-            settingsPanel.classList.add('open');
-            settingsOverlay.classList.add('open');
-        });
+if (settingsBtn && settingsPanel) {
+    settingsBtn.addEventListener('click', () => {
+        settingsPanel.classList.add('open');
+        settingsOverlay.classList.add('open');
+    });
 
-        closeSettingsBtn.addEventListener('click', () => {
-            settingsPanel.classList.remove('open');
-            settingsOverlay.classList.remove('open');
-        });
+    closeSettingsBtn.addEventListener('click', () => {
+        settingsPanel.classList.remove('open');
+        settingsOverlay.classList.remove('open');
+    });
 
-        settingsOverlay.addEventListener('click', () => {
-            settingsPanel.classList.remove('open');
-            settingsOverlay.classList.remove('open');
-        });
-    }
+    settingsOverlay.addEventListener('click', () => {
+        settingsPanel.classList.remove('open');
+        settingsOverlay.classList.remove('open');
+    });
+}
 
     const navBtns = document.querySelectorAll('.nav-btn');
     navBtns.forEach(btn => {
