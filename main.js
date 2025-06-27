@@ -332,6 +332,10 @@ document.getElementById('sentence-display').addEventListener('touchstart', handl
 document.getElementById('sentence-display').addEventListener('touchend', handleTouchEnd, { passive: true });
 // Finally, set up the DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure settings panel starts closed (ADD THESE 2 LINES)
+    document.getElementById('settings-panel').classList.remove('open');
+    document.getElementById('settings-overlay').classList.remove('open');
+    
     appState.init();
     setupButtonFunctionality();
     setupTextInput();
