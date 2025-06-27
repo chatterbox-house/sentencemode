@@ -1,4 +1,6 @@
 // Polyglot Learner - Shared JavaScript for all languages
+// Initialize app state
+const appState = {
 
 // First, define all helper functions that will be used later
 function setupButtonFunctionality() {
