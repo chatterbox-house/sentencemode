@@ -301,7 +301,148 @@ header {
         font-size: calc(var(--font-size) * 1.1);
         margin-bottom: 0.5rem;
     }
+ .paste-indicator {
+            top: auto;
+            bottom: 1rem;
+            right: 1rem;
+        }
+        
+        .text-import-container .btn {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .mode-toggle {
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mode-toggle-btn {
+            width: 100%;
+            margin: 0;
+        }
+        
+        #process-text, #clear-text, #show-history-btn {
+            width: 100%;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        #translate-to-japanese {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .dictionary-entries {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 0.5rem;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .dictionary-entry {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .dictionary-entry:hover {
+            background-color: var(--accent);
+        }
+        
+        .settings-panel {
+            width: 100%;
+            right: -100%;
+        }
+        
+        .settings-panel.open {
+            right: 0;
+        }
+        
+        /* Fix floating buttons so they don't cover content */
+        .tts-speed-control {
+            top: 5rem !important;
+            right: 1rem !important;
+            flex-direction: row;
+            padding: 0.3rem !important;
+            transform: scale(0.8) !important;
+            transform-origin: top right !important;
+            background-color: var(--accent) !important;
+        }
+        
+        .tts-speed-control .tts-speed-btn {
+            font-size: 0.8rem !important;
+            padding: 0.2rem 0.4rem !important;
+        }
+        
+        .tts-speed-label {
+            display: none; /* Hide label on mobile */
+        }
+        
+        .translation-toggle {
+            top: 9rem !important;
+            right: 1rem !important;
+        }
+        
+        .sound-toggle {
+            bottom: 6rem !important;
+            right: 1rem !important;
+        }
+        
+        /* Make header more compact */
+        header {
+            padding: 0.5rem;
+        }
+        
+        .nav-tabs {
+            gap: 0.2rem;
+        }
+        
+        .nav-btn {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+        }
+        
+        /* Give space at bottom for controls */
+        main {
+            padding-bottom: 80px;
+        }
+        
+        /* Adjust review mode for mobile */
+        .review-question {
+             font-size: 1.8rem; /* Increased from 1.5rem */
+        min-height: 90px; /* Increased from 80px */
+        }
+        
+        .hard-mode-buttons {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .hard-mode-btn {
+            width: 100%;
+        }
+@media (max-width: 600px) {
+    .input-actions .btn {
+        background-color: var(--highlight) !important;
+        color: white !important;
+        border: 2px solid white !important;
+    }
+#vocab-review-view .btn {
+    width: 100%;
+    margin-top: 0;
 }
+
+#vocab-review-view .btn#wipe-data-btn {
+    margin-top: 1rem;
+}
+    }
 
 /* Additional component styles from original file... */
 /* ... (remaining styles from the original file) ... */
