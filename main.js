@@ -55,7 +55,28 @@ const appState = {
         localStorage.setItem('theme', this.theme);
         this.applyTheme();
     },
+    // Text input functionality
+function setupTextInput() {
+    const textInput = document.getElementById('text-input');
+    const charCount = document.getElementById('char-count');
     
+    if (textInput && charCount) {
+        textInput.addEventListener('input', () => {
+            charCount.textContent = textInput.value.length;
+        });
+    }
+}
+
+// Add this to your DOMContentLoaded event:
+document.addEventListener('DOMContentLoaded', function() {
+    appState.init();
+    setupButtonFunctionality();
+    setupTextInput();
+    
+    if (typeof initLanguageApp === 'function') {
+        initLanguageApp();
+    }
+});
     // Initialize audio
     initAudio: function() {
         try {
