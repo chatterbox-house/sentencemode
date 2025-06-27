@@ -328,7 +328,8 @@ function setupPasteButton() {
         }
     });
 }
-
+document.getElementById('sentence-display').addEventListener('touchstart', handleTouchStart, { passive: true });
+document.getElementById('sentence-display').addEventListener('touchend', handleTouchEnd, { passive: true });
 // Finally, set up the DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', function() {
     appState.init();
