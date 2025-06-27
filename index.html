@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyglot Learner - Language Selection</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional styles for the language selector page */
+        .language-selection {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .language-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+        }
+        
+        .language-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .language-flag {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .language-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .language-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header>
+        <div class="logo">Polyglot Learner</div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </header>
+    
+    <main>
+        <div class="language-selection">
+            <h1>Choose Your Language</h1>
+            <p>Select a language to start learning</p>
+            
+            <div class="language-grid">
+                <!-- Japanese -->
+                <div class="language-card" onclick="window.location.href='japanese.html'">
+                    <div class="language-flag">🇯🇵</div>
+                    <div class="language-name">Japanese</div>
+                    <div class="language-desc">日本語を学ぶ</div>
+                </div>
+                
+                <!-- Spanish -->
+                <div class="language-card" onclick="window.location.href='spanish.html'">
+                    <div class="language-flag">🇪🇸</div>
+                    <div class="language-name">Spanish</div>
+                    <div class="language-desc">Aprender español</div>
+                </div>
+                
+                <!-- Template for adding more languages -->
+                <!-- 
+                <div class="language-card" onclick="window.location.href='newlanguage.html'">
+                    <div class="language-flag">🇺🇳</div>
+                    <div class="language-name">New Language</div>
+                    <div class="language-desc">Description</div>
+                </div>
+                -->
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Theme toggle functionality
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            this.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        });
+        
+        // Apply saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.getElementById('theme-toggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+    </script>
+</body>
+</html>
