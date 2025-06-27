@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a2e">
-    <title>JapLearner - Japanese Learning Tool</title>
+    <title>SentenceMODE - Japanese Learning</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body data-language="ja">
     <div class="app-container">
         <header>
-            <div class="logo">JapLearner</div>
+            <div class="logo">SentenceMODE</div>
             <div class="nav-tabs">
                 <button class="nav-btn active" data-view="text-import" aria-label="Reader">Reader</button>
                 <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">Vocab</button>
-                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button> 
+                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button>
             </div>
             <div>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
@@ -94,7 +94,7 @@
             <section id="text-import-view" class="view active">
                 <div class="how-to-use">
                     <div class="how-to-use-title" id="how-to-use-toggle">
-                        <span>How to Use JapLearner</span>
+                        <span>How to Use SentenceMODE</span>
                         <span>▼</span>
                     </div>
                     <div class="how-to-use-content" id="how-to-use-content">
@@ -206,7 +206,9 @@
                     <button class="jump-btn" id="jump-btn">Go</button>
                 </div>
                 
-<div class="sentence-display" id="sentence-display" aria-label="Current sentence">
+                <div class="sentence-display" id="sentence-display" aria-label="Current sentence" 
+                     ontouchstart="handleTouchStart(event)" 
+                     ontouchend="handleTouchEnd(event)">
                     Select text to begin reading
                     <button class="favorite-btn" id="favorite-sentence-btn" aria-label="Add to bookmarks">☆</button>
                 </div>
@@ -280,24 +282,14 @@
             </section>
             
             <section id="review-mode-view" class="view">
+                <button id="hide-header-btn" class="hide-header-btn" onclick="toggleHeaderVisibility()">↑</button>
                 <div class="review-container">
-                    <div class="progress-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill" style="width: 0%; height: 8px; background-color: var(--highlight); border-radius: 4px;"></div>
-                        </div>
-                        <div class="progress-text" id="progress-text">0/0 (0% mastered)</div>
-                    </div>
-                    
                     <div class="review-question" id="review-question"></div>
                     
                     <div id="matching-game-container" class="matching-game-container" style="display: none;">
                         <div class="matching-game-columns">
-                            <div class="matching-column" id="left-column">
-                                <div class="matching-column-header" id="left-header"></div>
-                            </div>
-                            <div class="matching-column" id="right-column">
-                                <div class="matching-column-header" id="right-header"></div>
-                            </div>
+                            <div class="matching-column" id="left-column"></div>
+                            <div class="matching-column" id="right-column"></div>
                         </div>
                         <button class="btn shuffle-btn" id="shuffle-cards" aria-label="Shuffle cards">Shuffle Cards</button>
                     </div>
@@ -336,9 +328,7 @@
                         </div>
                     </div>
                     
-                    <div id="vocab-list" style="max-height: 300px; overflow-y: auto; margin-top: 1rem;">
-                        <!-- Words will appear here -->
-                    </div>
+                    <div id="vocab-list" style="max-height: 300px; overflow-y: auto; margin-top: 1rem;"></div>
                 </div>
                 
                 <button class="btn" id="back-to-review-btn" style="margin-top: 1rem;" aria-label="Back to review">
@@ -350,9 +340,7 @@
                 <h2>Recently Read Texts</h2>
                 <p>Your recently imported texts (saved for 24 hours)</p>
                 
-                <div id="history-list" class="resources-container">
-                    <!-- History items will appear here -->
-                </div>
+                <div id="history-list" class="resources-container"></div>
                 
                 <button class="btn" id="clear-history-btn" style="background-color: var(--danger); margin-top: 1rem;" aria-label="Clear history">
                     Clear All History
@@ -366,9 +354,7 @@
                 <h2>Saved Bookmarks</h2>
                 <p>Your favorite sentences and readings</p>
                 
-                <div id="bookmarks-list" class="resources-container">
-                    <!-- Bookmarks will appear here -->
-                </div>
+                <div id="bookmarks-list" class="resources-container"></div>
                 
                 <button class="btn" id="clear-bookmarks-btn" style="background-color: var(--danger); margin-top: 1rem;">
                     Clear All Bookmarks
@@ -389,9 +375,6 @@
         
         <div class="toast" id="toast"></div>
         <div class="sound-toggle" id="sound-toggle" aria-label="Toggle sound">🔊</div>
-        
-
-        
         <div class="tooltip" id="word-tooltip"></div>
     </div>
 
