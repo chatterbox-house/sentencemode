@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>JapLearner - Japanese Learning Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-language="ja">
+    <div class="app-container">
+        <header>
+            <div class="logo">JapLearner</div>
+            <div class="nav-tabs">
+                <button class="nav-btn active" data-view="text-import" aria-label="Reader">Reader</button>
+                <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">Vocab</button>
+                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button> 
+            </div>
+            <div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+                <button class="settings-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+            </div>
+        </header>
+        
+        <!-- Main content sections (same as original) -->
+        <main>
+            <section id="text-import-view" class="view active">
+                <div class="text-import-container">
+                    <h2>Import Japanese Text <span role="img" aria-label="Japanese">🇯🇵</span></h2>
+                    <p>Paste Japanese text below to start learning (max 5,000 characters)</p>
+                    <textarea class="text-input" id="text-input" placeholder="例: 猫が寝ている。犬が走っている。..." aria-label="Japanese text input"></textarea>
+                </div>
+                
+                <div class="resources-container">
+                    <h3 class="resources-title">📚 Japanese Learning Resources</h3>
+                    <div class="resources-list">
+                        <a href="https://www3.nhk.or.jp/news/easy/" class="resource-link" target="_blank" rel="noopener" aria-label="NHK Easy News">
+                            <span>NHK Easy News</span>
+                        </a>
+                        <a href="https://news.yahoo.co.jp/" class="resource-link" target="_blank" rel="noopener" aria-label="Yahoo Japan News">
+                            <span>Yahoo Japan News</span>
+                        </a>
+                         <a href="https://www3.nhk.or.jp/news/" class="resource-link" target="_blank" rel="noopener" aria-label="NHK News">
+                            <span>NHK News</span>
+                        </a>
+                        <a href="https://www.asahi.com/" class="resource-link" target="_blank" rel="noopener" aria-label="Asahi Shimbun">
+                            <span>Asahi Shimbun</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="reading-view" class="view">
+                <div class="word-selection-box" id="word-selection-box">
+                    <div class="selected-word" id="selected-word"></div>
+                    <input type="text" class="translation-input" id="vocab-translation" placeholder="Enter translation..." aria-label="Word translation input" autofocus>
+                    <button class="btn" id="lookup-word" style="background-color: var(--accent); margin-bottom: 0.5rem;">
+                        Lookup in Dictionary
+                    </button>
+                    <div class="dictionary-results" id="dictionary-results" style="display: none;">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--highlight);">Dictionary Results</h3>
+                        <div class="dictionary-entries" id="dictionary-entries"></div>
+                    </div>
+                    <button class="btn" id="add-to-vocab" aria-label="Add to vocabulary">Add to Vocabulary</button>
+                </div>
+                
+                <div class="jump-to-sentence">
+                    <input type="number" class="jump-input" id="jump-input" placeholder="Jump to sentence..." min="1">
+                    <button class="jump-btn" id="jump-btn">Go</button>
+                </div>
+                
+<div class="sentence-display" id="sentence-display" aria-label="Current sentence" 
+     ontouchstart="handleTouchStart(event)" 
+     ontouchend="handleTouchEnd(event)">
+                    Select text to begin reading
+<button class="favorite-btn" id="favorite-sentence-btn" aria-label="Add to bookmarks">☆</button>
+                </div>
+                <div class="sentence-counter" id="sentence-counter">
+                    Sentence 0/0
+                </div>
+                <div class="translation-display" id="translation-display"></div>
+                
+                <div class="sentence-controls">
+                    <button class="control-btn" id="prev-sentence" aria-label="Previous sentence">←</button>
+                    <button class="control-btn" id="translate-btn" aria-label="Translate sentence">翻訳</button>
+                    <button class="control-btn" id="tts-button" aria-label="Text to speech">🔊</button>
+                    <button class="control-btn" id="next-sentence" aria-label="Next sentence">→</button>
+                </div>
+                <select id="translation-lang" class="lang-selector" aria-label="Translation language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                </select>
+            </section>
+            
+            <section id="vocab-review-view" class="view">
+                <h2>Vocabulary Review</h2>
+                <p>Select a difficulty level to start reviewing</p>
+                
+                <div class="bucket-container">
+                    <div class="bucket-card new" data-bucket="new" aria-label="New words">
+                        <div class="bucket-count" id="new-count">0</div>
+                        <div class="bucket-label">New Words</div>
+                    </div>
+                    <div class="bucket-card easy" data-bucket="easy" aria-label="Easy words">
+                        <div class="bucket-count" id="easy-count">0</div>
+                        <div class="bucket-label">Easy</div>
+                    </div>
+                    <div class="bucket-card medium" data-bucket="medium" aria-label="Medium words">
+                        <div class="bucket-count" id="medium-count">0</div>
+                        <div class="bucket-label">Medium</div>
+                    </div>
+                    <div class="bucket-card hard" data-bucket="hard" aria-label="Hard words">
+                        <div class="bucket-count" id="hard-count">0</div>
+                        <div class="bucket-label">Hard</div>
+                    </div>
+                </div>
+                
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+    <button class="btn" id="start-review" disabled aria-label="Start review" style="flex: 1;">Select a difficulty to start</button>
+    <button class="btn" id="manage-vocab-btn" style="background-color: var(--accent); flex: 1;" aria-label="Manage vocabulary">
+        Manage Vocabulary
+    </button>
+</div>
+<button class="btn" id="wipe-data-btn" style="background-color: var(--danger); width: 100%;" aria-label="Wipe all data">
+    Wipe All Data
+</button>
+                
+                <div class="progress-stats">
+                    <h3>Today's Progress</h3>
+                    <div class="streak-display">
+                        <span class="streak-count" id="daily-streak">0</span>
+                        <span class="streak-label">Day Streak</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Words Learned:</span>
+                        <span class="stat-value" id="daily-words-learned">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Time Spent:</span>
+                        <span class="stat-value" id="daily-time-spent">0 min</span>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="review-mode-view" class="view">
+                <div class="review-container">
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%; height: 8px; background-color: var(--highlight); border-radius: 4px;"></div>
+                        </div>
+<div class="progress-text" id="progress-text">0/0 (0% mastered)</div>
+
+                    </div>
+                    
+                    <div class="review-question" id="review-question"></div>
+                    
+                    <div id="matching-game-container" class="matching-game-container" style="display: none;">
+                        <div class="matching-game-columns">
+                            <div class="matching-column" id="left-column">
+                                <div class="matching-column-header" id="left-header"></div>
+                            </div>
+                            <div class="matching-column" id="right-column">
+                                <div class="matching-column-header" id="right-header"></div>
+                            </div>
+                        </div>
+                        <button class="btn shuffle-btn" id="shuffle-cards" aria-label="Shuffle cards">Shuffle Cards</button>
+                    </div>
+                    
+                    <div id="hard-mode-container" class="hard-mode-buttons" style="display: none;">
+                        <button class="hard-mode-btn knew-it" id="knew-it-btn" aria-label="I know this">I know this</button>
+                        <button class="hard-mode-btn didnt-know" id="didnt-know-btn" aria-label="Don't know">Don't know</button>
+                        <button class="hard-mode-btn skip-btn" id="skip-btn" aria-label="Skip word">Skip</button>
+                    </div>
+                </div>
+                
+                <button class="btn" id="exit-review" aria-label="Exit review">Exit Review</button>
+            </section>
+            
+            <section id="manage-vocab-view" class="view">
+                <h2>Manage Vocabulary</h2>
+                <p>View and delete words from your vocabulary</p>
+                
+                <div class="resources-container" id="vocab-list-container">
+                    <div class="bucket-container">
+                        <div class="bucket-card new" data-bucket="new">
+                            <div class="bucket-count" id="manage-new-count">0</div>
+                            <div class="bucket-label">New Words</div>
+                        </div>
+                        <div class="bucket-card easy" data-bucket="easy">
+                            <div class="bucket-count" id="manage-easy-count">0</div>
+                            <div class="bucket-label">Easy</div>
+                        </div>
+                        <div class="bucket-card medium" data-bucket="medium">
+                            <div class="bucket-count" id="manage-medium-count">0</div>
+                            <div class="bucket-label">Medium</div>
+                        </div>
+                        <div class="bucket-card hard" data-bucket="hard">
+                            <div class="bucket-count" id="manage-hard-count">0</div>
+                            <div class="bucket-label">Hard</div>
+                        </div>
+                    </div>
+                    
+                    <div id="vocab-list" style="max-height: 300px; overflow-y: auto; margin-top: 1rem;">
+                        <!-- Words will appear here -->
+                    </div>
+                </div>
+                
+                <button class="btn" id="back-to-review-btn" style="margin-top: 1rem;" aria-label="Back to review">
+                    Back to Vocabulary Review
+                </button>
+            </section>
+            
+            <section id="history-view" class="view">
+                <h2>Recently Read Texts</h2>
+                <p>Your recently imported texts (saved for 24 hours)</p>
+                
+                <div id="history-list" class="resources-container">
+                    <!-- History items will appear here -->
+                </div>
+                
+                <button class="btn" id="clear-history-btn" style="background-color: var(--danger); margin-top: 1rem;" aria-label="Clear history">
+                    Clear All History
+                </button>
+                <button class="btn" id="back-to-import-btn" style="margin-top: 1rem;" aria-label="Back to import">
+                    Back to Text Import
+                </button>
+            </section>
+<section id="bookmarks-view" class="view">
+    <h2>Saved Bookmarks</h2>
+    <p>Your favorite sentences and readings</p>
+    
+    <div id="bookmarks-list" class="resources-container">
+        <!-- Bookmarks will appear here -->
+    </div>
+    
+    <button class="btn" id="clear-bookmarks-btn" style="background-color: var(--danger); margin-top: 1rem;">
+        Clear All Bookmarks
+    </button>
+</section>
+        </main>
+        
+        <script src="main.js"></script>
+</body>
+</html>
