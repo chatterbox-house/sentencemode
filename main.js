@@ -266,6 +266,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return newArray;
     }
 };
+// Polyglot Learner - Shared JavaScript for all languages
+// Initialize app state
+const appState = {
+    // ... (keep all your existing appState code exactly as is) ...
+};
+
 // Button functionality setup
 function setupButtonFunctionality() {
     // Settings panel toggle
@@ -317,13 +323,16 @@ function switchView(viewId) {
     });
 
     // Show selected view
-    document.getElementById(`${viewId}-view`).classList.add('active');
+    const viewElement = document.getElementById(`${viewId}-view`);
+    if (viewElement) {
+        viewElement.classList.add('active');
+    }
 
     // Update active nav button
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    document.querySelector(`.nav-btn[data-view="${viewId}"]`).classList.add('active');
+    document.querySelector(`.nav-btn[data-view="${viewId}"]`)?.classList.add('active');
 }
 
 function toggleMode(mode) {
@@ -336,29 +345,47 @@ function toggleMode(mode) {
     });
 
     if (mode === 'import') {
-        importContainer.style.display = 'block';
-        translateContainer.style.display = 'none';
-        document.querySelector('.mode-toggle-btn[data-mode="import"]').classList.add('active');
+        if (importContainer) importContainer.style.display = 'block';
+        if (translateContainer) translateContainer.style.display = 'none';
+        document.querySelector('.mode-toggle-btn[data-mode="import"]')?.classList.add('active');
     } else {
-        importContainer.style.display = 'none';
-        translateContainer.style.display = 'block';
-        document.querySelector('.mode-toggle-btn[data-mode="translate"]').classList.add('active');
+        if (importContainer) importContainer.style.display = 'none';
+        if (translateContainer) translateContainer.style.display = 'block';
+        document.querySelector('.mode-toggle-btn[data-mode="translate"]')?.classList.add('active');
     }
 }
 
-// Initialize button functionality when DOM is loaded
+// Text input functionality
+function setupTextInput() {
+    const textInput = document.getElementById('text-input');
+    const charCount = document.getElementById('char-count');
+    
+    if (textInput && charCount) {
+        textInput.addEventListener('input', () => {
+            charCount.textContent = textInput.value.length;
+        });
+    }
+}
+
+// Paste button functionality
+function setupPasteButton() {
+    document.getElementById('paste-btn')?.addEventListener('click', async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            document.getElementById('text-input').value = text;
+            document.getElementById('char-count').textContent = text.length;
+        } catch (err) {
+            appState.showToast('Failed to paste from clipboard', 'error');
+        }
+    });
+}
+
+// Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     appState.init();
     setupButtonFunctionality();
-    
-    // Language-specific initialization
-    if (typeof initLanguageApp === 'function') {
-        initLanguageApp();
-    }
-});
-// Initialize the app when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    appState.init();
+    setupTextInput();
+    setupPasteButton();
     
     // Language-specific initialization
     if (typeof initLanguageApp === 'function') {
