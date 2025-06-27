@@ -66,7 +66,16 @@ function setupTextInput() {
         });
     }
 }
-
+// Paste button functionality
+document.getElementById('paste-btn')?.addEventListener('click', async () => {
+    try {
+        const text = await navigator.clipboard.readText();
+        document.getElementById('text-input').value = text;
+        document.getElementById('char-count').textContent = text.length;
+    } catch (err) {
+        appState.showToast('Failed to paste from clipboard', 'error');
+    }
+});
 // Add this to your DOMContentLoaded event:
 document.addEventListener('DOMContentLoaded', function() {
     appState.init();
