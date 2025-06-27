@@ -216,11 +216,11 @@ const appState = {
             const j = Math.floor(Math.random() * (i + 1));
             [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
         }
-        return newArray;
+    return newArray;
     }
 };
 
-// Then define all helper functions
+// Helper functions
 function setupButtonFunctionality() {
     const settingsBtn = document.getElementById('settings-btn');
     const closeSettingsBtn = document.getElementById('close-settings');
