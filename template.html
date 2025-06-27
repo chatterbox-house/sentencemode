@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="[LANG-CODE]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Polyglot Learner - [LANGUAGE]</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-language="[LANG-CODE]">
+    <div class="app-container">
+        <header>
+            <div class="logo">[LANGUAGE] Learner</div>
+            <div class="nav-tabs">
+                <!-- LANGUAGE-SPECIFIC: Update button labels -->
+                <button class="nav-btn active" data-view="text-import" aria-label="Reader">Reader</button>
+                <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">Vocab</button>
+                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button> 
+            </div>
+            <div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+                <button class="settings-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+            </div>
+        </header>
+        
+        <main>
+            <section id="text-import-view" class="view active">
+                <div class="text-import-container">
+                    <!-- LANGUAGE-SPECIFIC: Update heading and placeholder text -->
+                    <h2>Import [LANGUAGE] Text <span role="img" aria-label="[LANGUAGE]">[FLAG-EMOJI]</span></h2>
+                    <p>Paste [LANGUAGE] text below to start learning (max 5,000 characters)</p>
+                    <textarea class="text-input" id="text-input" placeholder="[EXAMPLE TEXT IN TARGET LANGUAGE]..." aria-label="[LANGUAGE] text input"></textarea>
+                </div>
+                
+                <div class="resources-container">
+                    <h3 class="resources-title">📚 [LANGUAGE] Learning Resources</h3>
+                    <div class="resources-list">
+                        <!-- LANGUAGE-SPECIFIC: Add 3-5 quality resources -->
+                        <a href="[RESOURCE-URL]" class="resource-link" target="_blank" rel="noopener" aria-label="[RESOURCE NAME]">
+                            <span>[RESOURCE NAME]</span>
+                        </a>
+                        <!-- Add more resources -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Other sections will use shared CSS/JS -->
+            <!-- ... -->
+            
+        </main>
+        
+        <script src="main.js"></script>
+</body>
+</html>
