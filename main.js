@@ -1,5 +1,121 @@
 // Polyglot Learner - Shared JavaScript for all languages
-// Initialize app state
+
+// First, define all helper functions that will be used later
+function setupButtonFunctionality() {
+    // Settings panel toggle
+    const settingsBtn = document.getElementById('settings-btn');
+    const closeSettingsBtn = document.getElementById('close-settings');
+    const settingsPanel = document.getElementById('settings-panel');
+    const settingsOverlay = document.getElementById('settings-overlay');
+
+    if (settingsBtn && settingsPanel) {
+        settingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.add('open');
+            settingsOverlay.classList.add('open');
+        });
+
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.remove('open');
+            settingsOverlay.classList.remove('open');
+        });
+
+        settingsOverlay.addEventListener('click', () => {
+            settingsPanel.classList.remove('open');
+            settingsOverlay.classList.remove('open');
+        });
+    }
+
+    // View switching
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.getAttribute('data-view');
+            switchView(view);
+        });
+    });
+
+    // Mode toggle
+    const modeToggleBtns = document.querySelectorAll('.mode-toggle-btn');
+    modeToggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mode = btn.getAttribute('data-mode');
+            toggleMode(mode);
+        });
+    });
+}
+
+function switchView(viewId) {
+    // Hide all views
+    document.querySelectorAll('.view').forEach(view => {
+        view.classList.remove('active');
+    });
+
+    // Show selected view
+    const viewElement = document.getElementById(`${viewId}-view`);
+    if (viewElement) {
+        viewElement.classList.add('active');
+    }
+
+    // Update active nav button
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    const activeBtn = document.querySelector(`.nav-btn[data-view="${viewId}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
+function toggleMode(mode) {
+    const importContainer = document.getElementById('import-container');
+    const translateContainer = document.getElementById('translate-container');
+    const modeBtns = document.querySelectorAll('.mode-toggle-btn');
+
+    modeBtns.forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    const activeModeBtn = document.querySelector(`.mode-toggle-btn[data-mode="${mode}"]`);
+    if (activeModeBtn) activeModeBtn.classList.add('active');
+
+    if (mode === 'import') {
+        if (importContainer) importContainer.style.display = 'block';
+        if (translateContainer) translateContainer.style.display = 'none';
+    } else {
+        if (importContainer) importContainer.style.display = 'none';
+        if (translateContainer) translateContainer.style.display = 'block';
+    }
+}
+
+function setupTextInput() {
+    const textInput = document.getElementById('text-input');
+    const charCount = document.getElementById('char-count');
+    
+    if (textInput && charCount) {
+        textInput.addEventListener('input', () => {
+            charCount.textContent = textInput.value.length;
+        });
+    }
+}
+
+function setupPasteButton() {
+    const pasteBtn = document.getElementById('paste-btn');
+    if (!pasteBtn) return;
+
+    pasteBtn.addEventListener('click', async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            const textInput = document.getElementById('text-input');
+            const charCount = document.getElementById('char-count');
+            if (textInput && charCount) {
+                textInput.value = text;
+                charCount.textContent = text.length;
+            }
+        } catch (err) {
+            appState.showToast('Failed to paste from clipboard', 'error');
+        }
+    });
+}
+
+// Then define the appState object
 const appState = {
     currentLanguage: document.body.getAttribute('data-language') || 'ja',
     theme: localStorage.getItem('theme') || 'dark',
@@ -55,37 +171,7 @@ const appState = {
         localStorage.setItem('theme', this.theme);
         this.applyTheme();
     },
-    // Text input functionality
-function setupTextInput() {
-    const textInput = document.getElementById('text-input');
-    const charCount = document.getElementById('char-count');
     
-    if (textInput && charCount) {
-        textInput.addEventListener('input', () => {
-            charCount.textContent = textInput.value.length;
-        });
-    }
-}
-// Paste button functionality
-document.getElementById('paste-btn')?.addEventListener('click', async () => {
-    try {
-        const text = await navigator.clipboard.readText();
-        document.getElementById('text-input').value = text;
-        document.getElementById('char-count').textContent = text.length;
-    } catch (err) {
-        appState.showToast('Failed to paste from clipboard', 'error');
-    }
-});
-// Add this to your DOMContentLoaded event:
-document.addEventListener('DOMContentLoaded', function() {
-    appState.init();
-    setupButtonFunctionality();
-    setupTextInput();
-    
-    if (typeof initLanguageApp === 'function') {
-        initLanguageApp();
-    }
-});
     // Initialize audio
     initAudio: function() {
         try {
@@ -266,121 +352,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return newArray;
     }
 };
-// Polyglot Learner - Shared JavaScript for all languages
-// Initialize app state
-const appState = {
-    // ... (keep all your existing appState code exactly as is) ...
-};
 
-// Button functionality setup
-function setupButtonFunctionality() {
-    // Settings panel toggle
-    const settingsBtn = document.getElementById('settings-btn');
-    const closeSettingsBtn = document.getElementById('close-settings');
-    const settingsPanel = document.getElementById('settings-panel');
-    const settingsOverlay = document.getElementById('settings-overlay');
-
-    if (settingsBtn && settingsPanel) {
-        settingsBtn.addEventListener('click', () => {
-            settingsPanel.classList.add('open');
-            settingsOverlay.classList.add('open');
-        });
-
-        closeSettingsBtn.addEventListener('click', () => {
-            settingsPanel.classList.remove('open');
-            settingsOverlay.classList.remove('open');
-        });
-
-        settingsOverlay.addEventListener('click', () => {
-            settingsPanel.classList.remove('open');
-            settingsOverlay.classList.remove('open');
-        });
-    }
-
-    // View switching
-    const navBtns = document.querySelectorAll('.nav-btn');
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const view = btn.getAttribute('data-view');
-            switchView(view);
-        });
-    });
-
-    // Mode toggle
-    const modeToggleBtns = document.querySelectorAll('.mode-toggle-btn');
-    modeToggleBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const mode = btn.getAttribute('data-mode');
-            toggleMode(mode);
-        });
-    });
-}
-
-function switchView(viewId) {
-    // Hide all views
-    document.querySelectorAll('.view').forEach(view => {
-        view.classList.remove('active');
-    });
-
-    // Show selected view
-    const viewElement = document.getElementById(`${viewId}-view`);
-    if (viewElement) {
-        viewElement.classList.add('active');
-    }
-
-    // Update active nav button
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    document.querySelector(`.nav-btn[data-view="${viewId}"]`)?.classList.add('active');
-}
-
-function toggleMode(mode) {
-    const importContainer = document.getElementById('import-container');
-    const translateContainer = document.getElementById('translate-container');
-    const modeBtns = document.querySelectorAll('.mode-toggle-btn');
-
-    modeBtns.forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    if (mode === 'import') {
-        if (importContainer) importContainer.style.display = 'block';
-        if (translateContainer) translateContainer.style.display = 'none';
-        document.querySelector('.mode-toggle-btn[data-mode="import"]')?.classList.add('active');
-    } else {
-        if (importContainer) importContainer.style.display = 'none';
-        if (translateContainer) translateContainer.style.display = 'block';
-        document.querySelector('.mode-toggle-btn[data-mode="translate"]')?.classList.add('active');
-    }
-}
-
-// Text input functionality
-function setupTextInput() {
-    const textInput = document.getElementById('text-input');
-    const charCount = document.getElementById('char-count');
-    
-    if (textInput && charCount) {
-        textInput.addEventListener('input', () => {
-            charCount.textContent = textInput.value.length;
-        });
-    }
-}
-
-// Paste button functionality
-function setupPasteButton() {
-    document.getElementById('paste-btn')?.addEventListener('click', async () => {
-        try {
-            const text = await navigator.clipboard.readText();
-            document.getElementById('text-input').value = text;
-            document.getElementById('char-count').textContent = text.length;
-        } catch (err) {
-            appState.showToast('Failed to paste from clipboard', 'error');
-        }
-    });
-}
-
-// Initialize everything when DOM is loaded
+// Finally, set up the DOMContentLoaded event
 document.addEventListener('DOMContentLoaded', function() {
     appState.init();
     setupButtonFunctionality();
