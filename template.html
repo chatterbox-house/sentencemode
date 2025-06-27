@@ -1,20 +1,33 @@
 <!DOCTYPE html>
-<html lang="[LANG-CODE]">
+<!-- 
+Template for new language versions of SentenceMODE
+To create a new language version (e.g., Spanish):
+1. Copy this file to [language].html (e.g., spanish.html)
+2. Replace all LANGUAGE-SPECIFIC sections marked below
+3. Update the lang attribute in the HTML tag
+4. Update the body's data-language attribute
+5. Update the title tag
+6. Update resource links
+7. Update placeholder texts
+8. Update voice input language code in main.js
+-->
+
+<html lang="LANGUAGE-CODE"> <!-- Update this (e.g., "es" for Spanish) -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a1a2e">
-    <title>PolyglotLearner - [LANGUAGE] Learning Tool</title>
+    <title>SentenceMODE - LANGUAGE Learning</title> <!-- Update LANGUAGE -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body data-language="[LANG-CODE]">
+<body data-language="LANGUAGE-CODE"> <!-- Update this (e.g., "es" for Spanish) -->
     <div class="app-container">
         <header>
-            <div class="logo">PolyglotLearner</div>
+            <div class="logo">SentenceMODE</div>
             <div class="nav-tabs">
                 <button class="nav-btn active" data-view="text-import" aria-label="Reader">Reader</button>
                 <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">Vocab</button>
-                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button> 
+                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button>
             </div>
             <div>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
@@ -25,7 +38,7 @@
         <!-- Settings panel remains the same across languages -->
         <div class="settings-overlay" id="settings-overlay"></div>
         <div class="settings-panel" id="settings-panel">
-            <!-- Same settings panel content as japanese.html -->
+            <!-- Same as in japanese.html -->
         </div>
         
         <div class="offline-warning" id="offline-warning">You are offline - some features may not work</div>
@@ -34,23 +47,23 @@
             <section id="text-import-view" class="view active">
                 <div class="how-to-use">
                     <div class="how-to-use-title" id="how-to-use-toggle">
-                        <span>How to Use PolyglotLearner</span>
+                        <span>How to Use SentenceMODE</span>
                         <span>▼</span>
                     </div>
                     <div class="how-to-use-content" id="how-to-use-content">
-                        <p>1. Paste [LANGUAGE] text or translate from your language</p>
+                        <!-- Update instructions for the specific language -->
+                        <p>1. Paste LANGUAGE text or translate from your language</p>
                         <p>2. Read sentences and select words to add to vocabulary</p>
                         <p>3. Review vocabulary with matching games</p>
                         <p>4. Use keyboard shortcuts: Arrows (navigation), Space (TTS), Enter (confirm)</p>
                     </div>
                 </div>
                 
-                <!-- Text import section -->
                 <div class="text-import-container">
-                    <h2>Import [LANGUAGE] Text <span role="img" aria-label="[LANGUAGE]">[FLAG-EMOJI]</span></h2>
-                    <p>Paste [LANGUAGE] text below to start learning (max 5,000 characters)</p>
-                    <!-- Update placeholder text with language-specific example -->
-                    <textarea class="text-input" id="text-input" placeholder="[LANGUAGE EXAMPLE SENTENCES]" aria-label="[LANGUAGE] text input"></textarea>
+                    <!-- Update title and placeholder text -->
+                    <h2>Import LANGUAGE Text <span role="img" aria-label="LANGUAGE">🇯🇵</span></h2> <!-- Update flag emoji -->
+                    <p>Paste LANGUAGE text below to start learning (max 5,000 characters)</p>
+                    <textarea class="text-input" id="text-input" placeholder="Example text in LANGUAGE..." aria-label="LANGUAGE text input"></textarea>
                     <div class="char-count"><span id="char-count">0</span>/5000 characters</div>
                     <div class="input-actions" style="gap: 0.5rem; margin-bottom: 1rem;">
                         <button id="paste-btn" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="Paste">
@@ -74,14 +87,19 @@
                 </div>
 
                 <div class="mode-toggle">
-                    <button class="mode-toggle-btn active" data-mode="import" aria-label="Import [LANGUAGE] text">Import [LANGUAGE] Text</button>
-                    <button class="mode-toggle-btn" data-mode="translate" aria-label="Translate to [LANGUAGE]">Translate to [LANGUAGE]</button>
+                    <button class="mode-toggle-btn active" data-mode="import" aria-label="Import LANGUAGE text">Import LANGUAGE Text</button>
+                    <button class="mode-toggle-btn" data-mode="translate" aria-label="Translate to LANGUAGE">Translate to LANGUAGE</button>
                 </div>
 
-                <!-- Translate section -->
+                <!-- Import Section -->
+                <div id="import-container" class="text-import-container" style="display: block;">
+                    <h2>Import LANGUAGE Text <span role="img" aria-label="LANGUAGE">🇯🇵</span></h2> <!-- Update flag emoji -->
+                </div>
+
+                <!-- Translate Section -->
                 <div id="translate-container" class="text-import-container" style="display: none;">
-                    <h2>Translate to [LANGUAGE] <span role="img" aria-label="From your language to [LANGUAGE]">🌐 → [FLAG-EMOJI]</span></h2>
-                    <p>Type or speak text in your language to translate to [LANGUAGE] (max 5,000 characters)</p>
+                    <h2>Translate to LANGUAGE <span role="img" aria-label="From your language to LANGUAGE">🌐 → 🇯🇵</span></h2> <!-- Update flag emoji -->
+                    <p>Type or speak text in your language to translate to LANGUAGE (max 5,000 characters)</p>
                     <textarea class="text-input" id="translate-input" placeholder="Example: The cat is sleeping. The dog is running..." aria-label="Translation input"></textarea>
                     <div class="char-count"><span id="translate-char-count">0</span>/5000 characters</div>
                     <div class="input-actions" style="gap: 0.5rem; margin-bottom: 1rem;">
@@ -93,8 +111,8 @@
                         </button>
                     </div>
                     <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
-                        <button class="btn" id="translate-to-[LANGCODE]" aria-label="Translate text" style="flex: 1;">
-                            <span>Translate to [LANGUAGE]</span>
+                        <button class="btn" id="translate-to-language" aria-label="Translate text" style="flex: 1;">
+                            <span>Translate to LANGUAGE</span> <!-- Update LANGUAGE -->
                         </button>
                         <button class="btn" id="clear-text-translate" style="background-color: var(--danger); flex: 1;" aria-label="Clear text">
                             Clear Text
@@ -105,31 +123,41 @@
                     </div>
                 </div>
                 
-                <!-- Language-specific resources section -->
+                <!-- Update resources section with language-specific learning resources -->
                 <div class="resources-container">
-                    <h3 class="resources-title">📚 [LANGUAGE] Learning Resources</h3>
+                    <h3 class="resources-title">📚 LANGUAGE Learning Resources</h3>
                     <div class="resources-list">
-                        <!-- Add language-specific resources here -->
-                        <a href="[RESOURCE-URL-1]" class="resource-link" target="_blank" rel="noopener" aria-label="[RESOURCE-1-NAME]">
-                            <span>[RESOURCE-1-NAME]</span>
+                        <a href="https://example.com" class="resource-link" target="_blank" rel="noopener" aria-label="Resource 1">
+                            <span>Resource 1</span>
                         </a>
-                        <a href="[RESOURCE-URL-2]" class="resource-link" target="_blank" rel="noopener" aria-label="[RESOURCE-2-NAME]">
-                            <span>[RESOURCE-2-NAME]</span>
+                        <a href="https://example.com" class="resource-link" target="_blank" rel="noopener" aria-label="Resource 2">
+                            <span>Resource 2</span>
                         </a>
-                        <!-- Add more resources as needed -->
+                        <a href="https://example.com" class="resource-link" target="_blank" rel="noopener" aria-label="Resource 3">
+                            <span>Resource 3</span>
+                        </a>
                     </div>
                 </div>
             </section>
             
-            <!-- Reading view - mostly same structure -->
+            <!-- Reading view - mostly the same, but update translate button text if needed -->
             <section id="reading-view" class="view">
-                <!-- Same as japanese.html but update translations button text -->
                 <div class="word-selection-box" id="word-selection-box">
-                    <!-- Same structure -->
+                    <div class="selected-word" id="selected-word"></div>
+                    <input type="text" class="translation-input" id="vocab-translation" placeholder="Enter translation..." aria-label="Word translation input" autofocus>
+                    <button class="btn" id="lookup-word" style="background-color: var(--accent); margin-bottom: 0.5rem;">
+                        Lookup in Dictionary
+                    </button>
+                    <div class="dictionary-results" id="dictionary-results" style="display: none;">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--highlight);">Dictionary Results</h3>
+                        <div class="dictionary-entries" id="dictionary-entries"></div>
+                    </div>
+                    <button class="btn" id="add-to-vocab" aria-label="Add to vocabulary">Add to Vocabulary</button>
                 </div>
                 
                 <div class="jump-to-sentence">
-                    <!-- Same structure -->
+                    <input type="number" class="jump-input" id="jump-input" placeholder="Jump to sentence..." min="1">
+                    <button class="jump-btn" id="jump-btn">Go</button>
                 </div>
                 
                 <div class="sentence-display" id="sentence-display" aria-label="Current sentence" 
@@ -145,8 +173,7 @@
                 
                 <div class="sentence-controls">
                     <button class="control-btn" id="prev-sentence" aria-label="Previous sentence">←</button>
-                    <!-- Update translate button text to target language -->
-                    <button class="control-btn" id="translate-btn" aria-label="Translate sentence">[TRANSLATE-IN-LANGUAGE]</button>
+                    <button class="control-btn" id="translate-btn" aria-label="Translate sentence">Translate</button> <!-- Update text if needed -->
                     <button class="control-btn" id="tts-button" aria-label="Text to speech">🔊</button>
                     <button class="control-btn" id="next-sentence" aria-label="Next sentence">→</button>
                 </div>
@@ -158,62 +185,15 @@
                 </select>
             </section>
             
-            <!-- Vocabulary review sections remain structurally the same -->
-            <section id="vocab-review-view" class="view">
-                <!-- Same as japanese.html -->
-            </section>
+            <!-- The rest of the sections remain the same as they're not language-specific -->
+            <!-- ... -->
             
-            <section id="review-mode-view" class="view">
-                <!-- Same as japanese.html -->
-            </section>
-            
-            <section id="manage-vocab-view" class="view">
-                <!-- Same as japanese.html -->
-            </section>
-            
-            <section id="history-view" class="view">
-                <!-- Same as japanese.html -->
-            </section>
-            
-            <section id="bookmarks-view" class="view">
-                <!-- Same as japanese.html -->
-            </section>
         </main>
         
-        <!-- Same confirmation dialogs and controls as japanese.html -->
-        <div class="confirmation-dialog" id="wipe-confirmation" style="display: none;">
-            <!-- Same content -->
-        </div>
+        <!-- The rest of the file remains the same as japanese.html -->
         
-        <div class="toast" id="toast"></div>
-        <div class="sound-toggle" id="sound-toggle" aria-label="Toggle sound">🔊</div>
-        
-        <div class="tts-speed-control" id="tts-speed-control">
-            <!-- Same content -->
-        </div>
-        
-        <div class="tooltip" id="word-tooltip"></div>
     </div>
 
     <script src="main.js"></script>
-    
-    <!-- Language-specific script configuration -->
-    <script>
-        // Language-specific configuration
-        const languageConfig = {
-            code: '[LANG-CODE]', // e.g. 'es' for Spanish
-            name: '[LANGUAGE]', // e.g. 'Spanish'
-            flag: '[FLAG-EMOJI]', // e.g. '🇪🇸'
-            ttsLang: '[TTS-LANG-CODE]', // e.g. 'es-ES' for Spanish
-            dictionaryAPI: '[DICTIONARY-API-URL]', // API endpoint for dictionary lookups
-            exampleSentences: '[EXAMPLE SENTENCES]', // Language-specific example sentences
-            translateButtonText: '[TRANSLATE-IN-LANGUAGE]' // "Translate" in target language
-        };
-        
-        // Merge with main app configuration
-        if (typeof appConfig !== 'undefined') {
-            appConfig.language = languageConfig;
-        }
-    </script>
 </body>
 </html>
