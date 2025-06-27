@@ -236,7 +236,96 @@ const appState = {
         return newArray;
     }
 };
+// Button functionality setup
+function setupButtonFunctionality() {
+    // Settings panel toggle
+    const settingsBtn = document.getElementById('settings-btn');
+    const closeSettingsBtn = document.getElementById('close-settings');
+    const settingsPanel = document.getElementById('settings-panel');
+    const settingsOverlay = document.getElementById('settings-overlay');
 
+    if (settingsBtn && settingsPanel) {
+        settingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.add('open');
+            settingsOverlay.classList.add('open');
+        });
+
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.remove('open');
+            settingsOverlay.classList.remove('open');
+        });
+
+        settingsOverlay.addEventListener('click', () => {
+            settingsPanel.classList.remove('open');
+            settingsOverlay.classList.remove('open');
+        });
+    }
+
+    // View switching
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.getAttribute('data-view');
+            switchView(view);
+        });
+    });
+
+    // Mode toggle
+    const modeToggleBtns = document.querySelectorAll('.mode-toggle-btn');
+    modeToggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mode = btn.getAttribute('data-mode');
+            toggleMode(mode);
+        });
+    });
+}
+
+function switchView(viewId) {
+    // Hide all views
+    document.querySelectorAll('.view').forEach(view => {
+        view.classList.remove('active');
+    });
+
+    // Show selected view
+    document.getElementById(`${viewId}-view`).classList.add('active');
+
+    // Update active nav button
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`.nav-btn[data-view="${viewId}"]`).classList.add('active');
+}
+
+function toggleMode(mode) {
+    const importContainer = document.getElementById('import-container');
+    const translateContainer = document.getElementById('translate-container');
+    const modeBtns = document.querySelectorAll('.mode-toggle-btn');
+
+    modeBtns.forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    if (mode === 'import') {
+        importContainer.style.display = 'block';
+        translateContainer.style.display = 'none';
+        document.querySelector('.mode-toggle-btn[data-mode="import"]').classList.add('active');
+    } else {
+        importContainer.style.display = 'none';
+        translateContainer.style.display = 'block';
+        document.querySelector('.mode-toggle-btn[data-mode="translate"]').classList.add('active');
+    }
+}
+
+// Initialize button functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    appState.init();
+    setupButtonFunctionality();
+    
+    // Language-specific initialization
+    if (typeof initLanguageApp === 'function') {
+        initLanguageApp();
+    }
+});
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     appState.init();
