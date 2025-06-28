@@ -61,23 +61,6 @@
             font-size: 0.9rem;
             color: var(--text-secondary);
         }
-        
-        .coming-soon {
-            position: relative;
-            opacity: 0.7;
-        }
-        
-        .coming-soon::after {
-            content: "Coming Soon";
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--highlight);
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.7rem;
-        }
     </style>
 </head>
 <body>
@@ -92,7 +75,7 @@
         <main>
             <div class="language-container">
                 <h1 class="language-title">Select Your Learning Language</h1>
-                <p>Choose the language you want to learn. More languages coming soon!</p>
+                <p>Choose the language you want to learn with SentenceMODE</p>
                 
                 <div class="language-grid">
                     <!-- Japanese for English Speakers -->
@@ -102,6 +85,13 @@
                         <div class="language-description">For English speakers</div>
                     </a>
                     
+                    <!-- English for Japanese Speakers -->
+                    <a href="english-for-japanese.html" class="language-card">
+                        <div class="language-flag">🇬🇧</div>
+                        <div class="language-name">English</div>
+                        <div class="language-description">For Japanese speakers</div>
+                    </a>
+                    
                     <!-- Spanish for English Speakers -->
                     <a href="spanish.html" class="language-card">
                         <div class="language-flag">🇪🇸</div>
@@ -109,31 +99,26 @@
                         <div class="language-description">For English speakers</div>
                     </a>
                     
-                    <!-- English for Japanese Speakers -->
-                    <a href="english-for-japanese.html" class="language-card coming-soon">
-                        <div class="language-flag">🇬🇧</div>
-                        <div class="language-name">English</div>
-                        <div class="language-description">For Japanese speakers</div>
-                    </a>
-                    
-                    <!-- More language slots -->
-                    <div class="language-card coming-soon">
+                    <!-- French for English Speakers -->
+                    <a href="french.html" class="language-card">
                         <div class="language-flag">🇫🇷</div>
                         <div class="language-name">French</div>
                         <div class="language-description">For English speakers</div>
-                    </div>
+                    </a>
                     
-                    <div class="language-card coming-soon">
+                    <!-- German for English Speakers -->
+                    <a href="german.html" class="language-card">
                         <div class="language-flag">🇩🇪</div>
                         <div class="language-name">German</div>
                         <div class="language-description">For English speakers</div>
-                    </div>
+                    </a>
                     
-                    <div class="language-card coming-soon">
+                    <!-- Chinese for English Speakers -->
+                    <a href="chinese.html" class="language-card">
                         <div class="language-flag">🇨🇳</div>
                         <div class="language-name">Chinese</div>
                         <div class="language-description">For English speakers</div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </main>
