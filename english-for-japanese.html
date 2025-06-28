@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>SentenceMODE - 英語学習 (English for Japanese Speakers)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-language="en">
+    <div class="app-container">
+        <header>
+            <div class="logo">SentenceMODE</div>
+            <div class="nav-tabs">
+                <button class="nav-btn active" data-view="text-import" aria-label="Reader">リーダー</button>
+                <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">単語</button>
+                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">ライブラリ</button>
+            </div>
+            <div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+                <button class="settings-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+            </div>
+        </header>
+        
+        <div class="settings-overlay" id="settings-overlay"></div>
+        <div class="settings-panel" id="settings-panel">
+            <div class="settings-title">
+                <span>設定</span>
+                <button class="settings-btn" id="close-settings" aria-label="Close settings">✕</button>
+            </div>
+            
+            <div class="settings-group">
+                <h3>読書設定</h3>
+                <div class="settings-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="auto-translate-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">自動翻訳を表示</span>
+                </div>
+            </div>
+            
+            <div class="settings-group">
+                <h3>表示設定</h3>
+                <label class="settings-label">フォント</label>
+                <select class="settings-select" id="font-select">
+                    <option value="system">システムフォント</option>
+                    <option value="serif">セリフ体</option>
+                    <option value="sans-serif">サンセリフ体</option>
+                </select>
+                
+                <label class="settings-label">文字サイズ</label>
+                <input type="range" class="settings-range" id="font-size-range" min="12" max="24" step="1" value="16">
+                
+                <label class="settings-label">行間</label>
+                <input type="range" class="settings-range" id="line-height-range" min="1.2" max="2.5" step="0.1" value="1.6">
+                
+                <label class="settings-label">テーマ</label>
+                <select class="settings-select" id="theme-select">
+                    <option value="dark">ダーク</option>
+                    <option value="light">ライト</option>
+                    <option value="high-contrast">ハイコントラスト</option>
+                </select>
+            </div>
+            
+            <div class="settings-group">
+                <h3>進捗状況</h3>
+                <div class="streak-display">
+                    <span class="streak-count" id="streak-count">0</span>
+                    <span class="streak-label">日連続</span>
+                    <span class="streak-count" id="daily-goal-count">0</span>
+                    <span class="streak-label">/5 今日</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">覚えた単語:</span>
+                    <span class="stat-value" id="words-learned-count">0</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">学習時間:</span>
+                    <span class="stat-value" id="time-spent-count">0 分</span>
+                </div>
+                
+                <button class="btn" id="view-progress-btn" style="width: 100%; margin-top: 1rem;">
+                    詳細な進捗を見る
+                </button>
+            </div>
+        </div>
+        
+        <div class="offline-warning" id="offline-warning">オフラインです - 一部機能が利用できません</div>
+        
+        <main>
+            <section id="text-import-view" class="view active">
+                <div class="how-to-use">
+                    <div class="how-to-use-title" id="how-to-use-toggle">
+                        <span>SentenceMODEの使い方</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="how-to-use-content" id="how-to-use-content">
+                        <p>1. 英語のテキストを貼り付けるか、日本語から翻訳</p>
+                        <p>2. 文章を読み、単語を選択して語彙に追加</p>
+                        <p>3. マッチングゲームで語彙を復習</p>
+                        <p>4. ショートカットキー: 矢印キー(移動), スペース(音声読み上げ), Enter(確定)</p>
+                    </div>
+                </div>
+                
+                <div class="text-import-container">
+                    <h2>英語テキストをインポート <span role="img" aria-label="English">🇬🇧</span></h2>
+                    <p>学習を開始するために英語のテキストを貼り付けてください (最大5,000文字)</p>
+                    <textarea class="text-input" id="text-input" placeholder="例: The cat is sleeping. The dog is running..." aria-label="English text input"></textarea>
+                    <div class="char-count"><span id="char-count">0</span>/5000 文字</div>
+                    <div class="input-actions" style="gap: 0.5rem; margin-bottom: 1rem;">
+                        <button id="paste-btn" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="貼り付け">
+                            <span>📋 貼り付け</span>
+                        </button>
+                        <button id="voice-input-btn" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="音声入力">
+                            <span>🎤 音声入力</span>
+                        </button>
+                    </div>
+                    <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn" id="process-text" aria-label="テキスト処理" style="flex: 1;">
+                            <span>テキスト処理</span>
+                        </button>
+                        <button class="btn" id="clear-text" style="background-color: var(--danger); flex: 1;" aria-label="クリア">
+                            クリア
+                        </button>
+                        <button class="btn" id="show-history-btn" style="background-color: var(--accent); width: 100%; margin-top: 0.5rem;" aria-label="履歴を表示">
+                            履歴を表示
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mode-toggle">
+                    <button class="mode-toggle-btn active" data-mode="import" aria-label="英語テキストをインポート">英語テキストをインポート</button>
+                    <button class="mode-toggle-btn" data-mode="translate" aria-label="日本語から英語に翻訳">日本語から英語に翻訳</button>
+                </div>
+
+                <!-- Import Section -->
+                <div id="import-container" class="text-import-container" style="display: block;">
+                    <h2>英語テキストをインポート <span role="img" aria-label="English">🇬🇧</span></h2>
+                </div>
+
+                <!-- Translate Section -->
+                <div id="translate-container" class="text-import-container" style="display: none;">
+                    <h2>日本語から英語に翻訳 <span role="img" aria-label="From Japanese to English">🇯🇵 → 🇬🇧</span></h2>
+                    <p>英語に翻訳するために日本語のテキストを入力または音声入力してください (最大5,000文字)</p>
+                    <textarea class="text-input" id="translate-input" placeholder="例: 猫が寝ています。犬が走っています..." aria-label="Translation input"></textarea>
+                    <div class="char-count"><span id="translate-char-count">0</span>/5000 文字</div>
+                    <div class="input-actions" style="gap: 0.5rem; margin-bottom: 1rem;">
+                        <button id="paste-btn-translate" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="貼り付け">
+                            <span>📋 貼り付け</span>
+                        </button>
+                        <button id="voice-input-btn-translate" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="音声入力">
+                            <span>🎤 音声入力</span>
+                        </button>
+                    </div>
+                    <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn" id="translate-to-japanese" aria-label="翻訳" style="flex: 1;">
+                            <span>英語に翻訳</span>
+                        </button>
+                        <button class="btn" id="clear-text-translate" style="background-color: var(--danger); flex: 1;" aria-label="クリア">
+                            クリア
+                        </button>
+                        <button class="btn" id="show-history-btn-translate" style="background-color: var(--accent); width: 100%; margin-top: 0.5rem;" aria-label="履歴を表示">
+                            履歴を表示
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="resources-container">
+                    <h3 class="resources-title">📚 英語学習リソース</h3>
+                    <div class="resources-list">
+                        <a href="https://learningenglish.voanews.com/" class="resource-link" target="_blank" rel="noopener" aria-label="VOA Learning English">
+                            <span>VOA Learning English</span>
+                        </a>
+                        <a href="https://www.bbc.co.uk/learningenglish/" class="resource-link" target="_blank" rel="noopener" aria-label="BBC Learning English">
+                            <span>BBC Learning English</span>
+                        </a>
+                        <a href="https://www.ted.com/talks?language=ja" class="resource-link" target="_blank" rel="noopener" aria-label="TED Talks">
+                            <span>TED Talks (日本語字幕あり)</span>
+                        </a>
+                        <a href="https://www.nhk.or.jp/lesson/english/" class="resource-link" target="_blank" rel="noopener" aria-label="NHK英語講座">
+                            <span>NHK英語講座</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="reading-view" class="view">
+                <div class="word-selection-box" id="word-selection-box">
+                    <div class="selected-word" id="selected-word"></div>
+                    <input type="text" class="translation-input" id="vocab-translation" placeholder="翻訳を入力..." aria-label="Word translation input" autofocus>
+                    <button class="btn" id="lookup-word" style="background-color: var(--accent); margin-bottom: 0.5rem;">
+                        辞書で調べる
+                    </button>
+                    <div class="dictionary-results" id="dictionary-results" style="display: none;">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--highlight);">辞書検索結果</h3>
+                        <div class="dictionary-entries" id="dictionary-entries"></div>
+                    </div>
+                    <button class="btn" id="add-to-vocab" aria-label="単語帳に追加">単語帳に追加</button>
+                </div>
+                
+                <div class="jump-to-sentence">
+                    <input type="number" class="jump-input" id="jump-input" placeholder="文章番号を入力..." min="1">
+                    <button class="jump-btn" id="jump-btn">移動</button>
+                </div>
+                
+                <div class="sentence-display" id="sentence-display" aria-label="Current sentence" 
+                     ontouchstart="handleTouchStart(event)" 
+                     ontouchend="handleTouchEnd(event)">
+                    テキストを選択して読み始めます
+                    <button class="favorite-btn" id="favorite-sentence-btn" aria-label="ブックマークに追加">☆</button>
+                </div>
+                <div class="sentence-counter" id="sentence-counter">
+                    文章 0/0
+                </div>
+                <div class="translation-display" id="translation-display"></div>
+                
+                <div class="sentence-controls">
+                    <button class="control-btn" id="prev-sentence" aria-label="前の文章">←</button>
+                    <button class="control-btn" id="translate-btn" aria-label="翻訳">翻訳</button>
+                    <button class="control-btn" id="tts-button" aria-label="音声読み上げ">🔊</button>
+                    <button class="control-btn" id="next-sentence" aria-label="次の文章">→</button>
+                </div>
+                <select id="translation-lang" class="lang-selector" aria-label="翻訳言語">
+                    <option value="ja">日本語</option>
+                    <option value="en">英語</option>
+                    <option value="es">スペイン語</option>
+                    <option value="fr">フランス語</option>
+                </select>
+            </section>
+            
+            <section id="vocab-review-view" class="view">
+                <h2>単語復習</h2>
+                <p>復習する難易度を選択してください</p>
+                
+                <div class="bucket-container">
+                    <div class="bucket-card new" data-bucket="new" aria-label="新しい単語">
+                        <div class="bucket-count" id="new-count">0</div>
+                        <div class="bucket-label">新しい単語</div>
+                    </div>
+                    <div class="bucket-card easy" data-bucket="easy" aria-label="簡単な単語">
+                        <div class="bucket-count" id="easy-count">0</div>
+                        <div class="bucket-label">簡単</div>
+                    </div>
+                    <div class="bucket-card medium" data-bucket="medium" aria-label="中級単語">
+                        <div class="bucket-count" id="medium-count">0</div>
+                        <div class="bucket-label">中級</div>
+                    </div>
+                    <div class="bucket-card hard" data-bucket="hard" aria-label="難しい単語">
+                        <div class="bucket-count" id="hard-count">0</div>
+                        <div class="bucket-label">難しい</div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <button class="btn" id="start-review" disabled aria-label="復習開始" style="flex: 1;">難易度を選択してください</button>
+                    <button class="btn" id="manage-vocab-btn" style="background-color: var(--accent); flex: 1;" aria-label="単語を管理">
+                        単語を管理
+                    </button>
+                </div>
+                <button class="btn" id="wipe-data-btn" style="background-color: var(--danger); width: 100%;" aria-label="全データ削除">
+                    全データ削除
+                </button>
+                
+                <div class="progress-stats">
+                    <h3>今日の進捗</h3>
+                    <div class="streak-display">
+                        <span class="streak-count" id="daily-streak">0</span>
+                        <span class="streak-label">日連続</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">覚えた単語:</span>
+                        <span class="stat-value" id="daily-words-learned">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">学習時間:</span>
+                        <span class="stat-value" id="daily-time-spent">0 分</span>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="review-mode-view" class="view">
+                <button id="hide-header-btn" class="hide-header-btn" onclick="toggleHeaderVisibility()">↑</button>
+                <div class="review-container">
+                    <div class="review-question" id="review-question"></div>
+                    
+                    <div id="matching-game-container" class="matching-game-container" style="display: none;">
+                        <div class="matching-game-columns">
+                            <div class="matching-column" id="left-column"></div>
+                            <div class="matching-column" id="right-column"></div>
+                        </div>
+                        <button class="btn shuffle-btn" id="shuffle-cards" aria-label="カードをシャッフル">カードをシャッフル</button>
+                    </div>
+                    
+                    <div id="hard-mode-container" class="hard-mode-buttons" style="display: none;">
+                        <button class="hard-mode-btn knew-it" id="knew-it-btn" aria-label="知っている">知っている</button>
+                        <button class="hard-mode-btn didnt-know" id="didnt-know-btn" aria-label="知らない">知らない</button>
+                        <button class="hard-mode-btn skip-btn" id="skip-btn" aria-label="スキップ">スキップ</button>
+                    </div>
+                </div>
+                
+                <button class="btn" id="exit-review" aria-label="復習を終了">復習を終了</button>
+            </section>
+            
+            <section id="manage-vocab-view" class="view">
+                <h2>単語管理</h2>
+                <p>単語帳の単語を表示・削除</p>
+                
+                <div class="resources-container" id="vocab-list-container">
+                    <div class="bucket-container">
+                        <div class="bucket-card new" data-bucket="new">
+                            <div class="bucket-count" id="manage-new-count">0</div>
+                            <div class="bucket-label">新しい単語</div>
+                        </div>
+                        <div class="bucket-card easy" data-bucket="easy">
+                            <div class="bucket-count" id="manage-easy-count">0</div>
+                            <div class="bucket-label">簡単</div>
+                        </div>
+                        <div class="bucket-card medium" data-bucket="medium">
+                            <div class="bucket-count" id="manage-medium-count">0</div>
+                            <div class="bucket-label">中級</div>
+                        </div>
+                        <div class="bucket-card hard" data-bucket="hard">
+                            <div class="bucket-count" id="manage-hard-count">0</div>
+                            <div class="bucket-label">難しい</div>
+                        </div>
+                    </div>
+                    
+                    <div id="vocab-list" style="max-height: 300px; overflow-y: auto; margin-top: 1rem;"></div>
+                </div>
+                
+                <button class="btn" id="back-to-review-btn" style="margin-top: 1rem;" aria-label="単語復習に戻る">
+                    単語復習に戻る
+                </button>
+            </section>
+            
+            <section id="history-view" class="view">
+                <h2>最近読んだテキスト</h2>
+                <p>最近インポートしたテキスト (24時間保存)</p>
+                
+                <div id="history-list" class="resources-container"></div>
+                
+                <button class="btn" id="clear-history-btn" style="background-color: var(--danger); margin-top: 1rem;" aria-label="全履歴削除">
+                    全履歴削除
+                </button>
+                <button class="btn" id="back-to-import-btn" style="margin-top: 1rem;" aria-label="テキストインポートに戻る">
+                    テキストインポートに戻る
+                </button>
+            </section>
+            
+            <section id="bookmarks-view" class="view">
+                <h2>保存したブックマーク</h2>
+                <p>お気に入りの文章や読み物</p>
+                
+                <div id="bookmarks-list" class="resources-container"></div>
+                
+                <button class="btn" id="clear-bookmarks-btn" style="background-color: var(--danger); margin-top: 1rem;">
+                    全ブックマーク削除
+                </button>
+            </section>
+        </main>
+        
+        <div class="confirmation-dialog" id="wipe-confirmation" style="display: none;">
+            <div class="dialog-content" style="background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; max-width: 400px; margin: 0 auto; text-align: center; box-shadow: var(--shadow);">
+                <h3 style="margin-bottom: 1rem; color: var(--danger);">警告!</h3>
+                <p style="margin-bottom: 1.5rem;">保存した全ての文章と単語が削除されます。この操作は取り消せません!</p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button class="btn" id="confirm-wipe" style="background-color: var(--danger);" aria-label="削除を確認">はい、全て削除します</button>
+                    <button class="btn" id="cancel-wipe" style="background-color: var(--accent);" aria-label="キャンセル">キャンセル</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="toast" id="toast"></div>
+        <div class="sound-toggle" id="sound-toggle" aria-label="Toggle sound">🔊</div>
+        <div class="tooltip" id="word-tooltip"></div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
