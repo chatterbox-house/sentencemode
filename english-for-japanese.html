@@ -9,19 +9,21 @@
 </head>
 <body data-language="en">
     <div class="app-container">
-        <header>
-            <div class="logo">SentenceMODE</div>
-            <div class="nav-tabs">
-                <button class="nav-btn active" data-view="text-import" aria-label="Reader">リーダー</button>
-                <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">単語</button>
-                <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">ライブラリ</button>
-            </div>
-            <div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
-                <button class="settings-btn" id="settings-btn" aria-label="Settings">⚙️</button>
-            </div>
-        </header>
-        
+<header>
+    <div class="header-left">
+        <a href="index.html" class="back-btn" aria-label="Back to languages">←</a>
+        <div class="logo">SentenceMODE</div>
+    </div>
+    <div class="nav-tabs">
+        <button class="nav-btn active" data-view="text-import" aria-label="Reader">Reader</button>
+        <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">Vocab</button>
+        <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button>
+    </div>
+    <div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+        <button class="settings-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+    </div>
+</header>
         <div class="settings-overlay" id="settings-overlay"></div>
         <div class="settings-panel" id="settings-panel">
             <div class="settings-title">
