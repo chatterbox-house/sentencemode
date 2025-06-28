@@ -1127,6 +1127,8 @@ h2 {
         width: 35px !important;
         height: 35px !important;
         font-size: 1rem !important;
+        margin-left: 0.25rem !important;
+        flex-shrink: 0; /* Ensures it doesn't get squeezed */
     }
     
     header {
@@ -1276,8 +1278,9 @@ h2 {
     }
     
     .settings-panel {
-        width: 100%;
-        right: -100%;
+        width: 90%; /* Changed from 100% to 90% */
+        right: -90%; /* Changed from -100% to -90% */
+        max-width: 300px; /* Added to limit maximum width */
     }
     
     .settings-panel.open {
