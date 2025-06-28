@@ -230,11 +230,13 @@ header.hidden {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
+    display: none; /* Add this line */
 }
 
 .settings-overlay.open {
     opacity: 1;
     pointer-events: all;
+    display: block; /* Add this line */
 }
 
 .settings-title {
