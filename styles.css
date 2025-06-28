@@ -121,7 +121,35 @@ header.hidden {
 .hide-header-btn.visible {
     opacity: 1;
 }
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
+.back-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 600px) {
+    .back-btn {
+        font-size: 1.2rem;
+        padding: 0.3rem;
+    }
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
