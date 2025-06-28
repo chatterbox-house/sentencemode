@@ -87,7 +87,7 @@ header {
     padding: 1rem;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000; /* Increased from 100 to ensure it stays on top */
     box-shadow: var(--shadow);
     display: flex;
     justify-content: space-between;
@@ -350,7 +350,20 @@ input:checked + .toggle-slider:before {
 .toggle-label {
     font-size: 0.9rem;
 }
+/* Add this to prevent content from being hidden behind settings */
+main {
+    transition: margin-right 0.3s ease;
+}
 
+.settings-panel.open ~ main {
+    margin-right: 300px;
+}
+
+@media (max-width: 600px) {
+    .settings-panel.open ~ main {
+        margin-right: 0;
+    }
+}
 /* Main Content */
 main {
     padding: 1rem;
@@ -687,6 +700,7 @@ h2 {
     height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Add this line to prevent double scrollbars */
 }
 
 .matching-game-container {
@@ -1128,12 +1142,15 @@ h2 {
         height: 35px !important;
         font-size: 1rem !important;
         margin-left: 0.25rem !important;
-        flex-shrink: 0; /* Ensures it doesn't get squeezed */
+        flex-shrink: 0;
+        z-index: 1001; /* Add this to ensure they stay above other elements */
     }
     
+    /* Add this new rule to ensure header stays visible */
     header {
-        padding: 0.5rem;
-        gap: 0.5rem;
+        z-index: 1000;
+        position: sticky;
+        top: 0;
     }
     
     .logo {
@@ -1278,9 +1295,8 @@ h2 {
     }
     
     .settings-panel {
-        width: 90%; /* Changed from 100% to 90% */
-        right: -90%; /* Changed from -100% to -90% */
-        max-width: 300px; /* Added to limit maximum width */
+        width: 280px; /* Slightly smaller for mobile */
+        right: -280px;
     }
     
     .settings-panel.open {
