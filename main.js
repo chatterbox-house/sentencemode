@@ -443,9 +443,15 @@ function escapeRegExp(string) {
 function detectLanguage(text) {
     const japaneseChars = /[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF]/;
     const spanishChars = /[áéíóúñÁÉÍÓÚÑ]/;
+    const frenchChars = /[àâäçéèêëîïôöùûüÿæœÀÂÄÇÉÈÊËÎÏÔÖÙÛÜŸÆŒ]/;
+    const germanChars = /[äöüßÄÖÜẞ]/;
+    const chineseChars = /[\u4E00-\u9FFF]/;
     
     if (japaneseChars.test(text)) return 'ja';
     if (spanishChars.test(text)) return 'es';
+    if (frenchChars.test(text)) return 'fr';
+    if (germanChars.test(text)) return 'de';
+    if (chineseChars.test(text)) return 'zh';
     return 'en';
 }
 
