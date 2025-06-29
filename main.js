@@ -1188,43 +1188,6 @@ function toggleTheme() {
 }
 
 
-
-// Core application state
-
-    theme: localStorage.getItem('theme') || 'dark',
-    soundsEnabled: localStorage.getItem('soundsEnabled') !== 'false',
-    audioContext: null,
-    sounds: {},
-    currentHardWord: null,
-    currentHardStreak: 0,
-    textHistory: [],
-    isOnline: navigator.onLine,
-    debounceTimer: null,
-    uiLanguage: localStorage.getItem('uiLanguage') || 'en',
-    newWordsToday: parseInt(localStorage.getItem('newWordsToday')) || 0,
-    lastWordAddedDate: localStorage.getItem('lastWordAddedDate') || '',
-    currentFont: localStorage.getItem('font') || 'system',
-    currentFontSize: parseInt(localStorage.getItem('fontSize')) || 16,
-    currentLineHeight: parseFloat(localStorage.getItem('lineHeight')) || 1.6,
-    autoTranslate: localStorage.getItem('autoTranslate') === 'true',
-    sourceLanguage: 'en', // Default source language for translation
-    targetLanguage: 'ja', // Default target language
-    readingStats: JSON.parse(localStorage.getItem('readingStats')) || {
-        streak: 0,
-        lastActiveDate: '',
-        wordsLearned: 0,
-        timeSpent: 0,
-        dailyWords: 0,
-        dailyTime: 0,
-        dailySentences: 0
-    },
-    currentSessionStart: null,
-    selectedCards: [],
-    currentTtsUtterance: null,
-    wordLookupCache: {},
-    bookmarks: JSON.parse(localStorage.getItem('bookmarks')) || []
-};
-
 // Database configuration
 const DB_NAME = 'LanguageLearnerDB';
 const DB_VERSION = 3; // Updated version for language support
