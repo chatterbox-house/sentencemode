@@ -1567,7 +1567,12 @@ function initAudio() {
             gain.gain.exponentialRampToValueAtTime(0.001, state.audioContext.currentTime + 0.3);
             osc.stop(state.audioContext.currentTime + 0.3);
         };
-        
+        // Add touch event listeners
+const sentenceDisplay = document.getElementById('sentence-display');
+if (sentenceDisplay) {
+    sentenceDisplay.addEventListener('touchstart', handleTouchStart, { passive: true });
+    sentenceDisplay.addEventListener('touchend', handleTouchEnd, { passive: true });
+}
         // Incorrect answer sound
         state.sounds.incorrect = () => {
             const osc = state.audioContext.createOscillator();
