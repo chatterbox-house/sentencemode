@@ -1625,11 +1625,441 @@ function setupEventListeners() {
             updateLanguageUI();
         });
     });
+// ==============================================
+// Audio Functions
+// ==============================================
+
+function initAudio() {
+    try {
+        state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Correct answer sound
+        state.sounds.correct = () => {
+            const osc = state.audioContext.createOscillator();
+            const gain = state.audioContext.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = 880;
+            gain.gain.value = 0.5;
+            
+            osc.connect(gain);
+            gain.connect(state.audioContext.destination);
+            
+            osc.start();
+            osc.frequency.exponentialRampToValueAtTime(1760, state.audioContext.currentTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, state.audioContext.currentTime + 0.3);
+            osc.stop(state.audioContext.currentTime + 0.3);
+        };
+        
+        // Incorrect answer sound
+        state.sounds.incorrect = () => {
+            const osc = state.audioContext.createOscillator();
+            const gain = state.audioContext.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.value = 220;
+            gain.gain.value = 0.5;
+            
+            osc.connect(gain);
+            gain.connect(state.audioContext.destination);
+            
+            osc.start();
+            osc.frequency.exponentialRampToValueAtTime(110, state.audioContext.currentTime + 0.3);
+            gain.gain.exponentialRampToValueAtTime(0.001, state.audioContext.currentTime + 0.5);
+            osc.stop(state.audioContext.currentTime + 0.5);
+        };
+        
+        // Complete sound
+        state.sounds.complete = () => {
+            const notes = [523.25, 587.33, 659.25, 698.46, 783.99, 880];
+            const gain = state.audioContext.createGain();
+            gain.gain.value = 0.5;
+            gain.connect(state.audioContext.destination);
+            
+            notes.forEach((freq, i) => {
+                const osc = state.audioContext.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                osc.connect(gain);
+                
+                osc.start(state.audioContext.currentTime + i * 0.1);
+                osc.stop(state.audioContext.currentTime + i * 0.1 + 0.3);
+            });
+        };
+        
+        // Flip sound
+        state.sounds.flip = () => {
+            const osc = state.audioContext.createOscillator();
+            const gain = state.audioContext.createGain();
+            osc.type = 'square';
+            osc.frequency.value = 440;
+            gain.gain.value = 0.3;
+            
+            osc.connect(gain);
+            gain.connect(state.audioContext.destination);
+            
+            osc.start();
+            osc.frequency.exponentialRampToValueAtTime(880, state.audioContext.currentTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, state.audioContext.currentTime + 0.1);
+            osc.stop(state.audioContext.currentTime + 0.1);
+        };
+    } catch (e) {
+        console.warn('Audio initialization failed:', e);
+        state.soundsEnabled = false;
+    }
+}
+
+function playSound(name) {
+    if (state.soundsEnabled && state.sounds[name]) {
+        try {
+            state.sounds[name]();
+        } catch (e) {
+            console.warn('Sound playback failed:', e);
+        }
+    }
+}
+
+function toggleSounds() {
+    state.soundsEnabled = !state.soundsEnabled;
+    localStorage.setItem('soundsEnabled', state.soundsEnabled);
+    document.getElementById('sound-toggle').textContent = state.soundsEnabled ? '🔊' : '🔇';
+    showToast(`Sounds ${state.soundsEnabled ? 'enabled' : 'disabled'}`);
+}
+
+// ==============================================
+// Settings Management
+// ==============================================
+
+async function loadSettings() {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_SETTINGS], 'readonly');
+        const store = transaction.objectStore(STORE_SETTINGS);
+        
+        const requests = [
+            store.get('theme'),
+            store.get('font'),
+            store.get('fontSize'),
+            store.get('lineHeight'),
+            store.get('autoTranslate'),
+            store.get('languageSettings')
+        ];
+        
+        let completed = 0;
+        const results = {};
+        
+        requests.forEach((request, index) => {
+            request.onsuccess = () => {
+                const key = ['theme', 'font', 'fontSize', 'lineHeight', 'autoTranslate', 'languageSettings'][index];
+                results[key] = request.result?.value;
+                completed++;
+                
+                if (completed === requests.length) {
+                    if (results.theme) {
+                        state.theme = results.theme;
+                        localStorage.setItem('theme', state.theme);
+                    }
+                    
+                    if (results.font) {
+                        state.currentFont = results.font;
+                        localStorage.setItem('font', state.currentFont);
+                    }
+                    
+                    if (results.fontSize) {
+                        state.currentFontSize = results.fontSize;
+                        localStorage.setItem('fontSize', state.currentFontSize);
+                    }
+                    
+                    if (results.lineHeight) {
+                        state.currentLineHeight = results.lineHeight;
+                        localStorage.setItem('lineHeight', state.currentLineHeight);
+                    }
+                    
+                    if (results.autoTranslate !== undefined) {
+                        state.autoTranslate = results.autoTranslate;
+                        localStorage.setItem('autoTranslate', state.autoTranslate);
+                    }
+                    
+                    if (results.languageSettings) {
+                        state.sourceLanguage = results.languageSettings.source || 'en';
+                        state.targetLanguage = results.languageSettings.target || 'ja';
+                        localStorage.setItem('languageSettings', JSON.stringify({
+                            source: state.sourceLanguage,
+                            target: state.targetLanguage
+                        }));
+                    }
+                    
+                    resolve();
+                }
+            };
+            
+            request.onerror = (event) => {
+                console.error('Error loading setting:', event.target.error);
+                completed++;
+                
+                if (completed === requests.length) {
+                    resolve();
+                }
+            };
+        });
+    });
+}
+
+function applySettings() {
+    // Apply theme
+    document.documentElement.setAttribute('data-theme', state.theme);
+    document.getElementById('theme-toggle').textContent = state.theme === 'dark' ? '🌙' : '☀️';
     
-    // Add all other event listeners from the original code
-    // (paste, voice input, navigation buttons, etc.)
+    // Apply font settings
+    document.documentElement.setAttribute('data-font', state.currentFont);
+    document.documentElement.style.setProperty('--font-size', `${state.currentFontSize}px`);
+    document.documentElement.style.setProperty('--line-height', state.currentLineHeight);
+    
+    // Apply sound settings
+    document.getElementById('sound-toggle').textContent = state.soundsEnabled ? '🔊' : '🔇';
+    
+    // Apply auto-translate setting
+    if (document.getElementById('auto-translate-toggle')) {
+        document.getElementById('auto-translate-toggle').checked = state.autoTranslate;
+    }
+    
+    // Apply language selectors
+    const sourceLangSelect = document.getElementById('source-lang');
+    const targetLangSelect = document.getElementById('target-lang');
+    
+    if (sourceLangSelect) sourceLangSelect.value = state.sourceLanguage;
+    if (targetLangSelect) targetLangSelect.value = state.targetLanguage;
+}
+
+// ==============================================
+// Online Status Handling
+// ==============================================
+
+function updateOnlineStatus() {
+    state.isOnline = navigator.onLine;
+    const offlineWarning = document.getElementById('offline-warning');
+    
+    if (offlineWarning) {
+        offlineWarning.style.display = state.isOnline ? 'none' : 'block';
+    }
+    
+    // Add event listeners for future changes
+    window.addEventListener('online', () => {
+        state.isOnline = true;
+        if (offlineWarning) offlineWarning.style.display = 'none';
+        showToast('Back online', 'success');
+    });
+    
+    window.addEventListener('offline', () => {
+        state.isOnline = false;
+        if (offlineWarning) offlineWarning.style.display = 'block';
+        showToast('You are now offline', 'error');
+    });
+}
+
+// ==============================================
+// UI Helper Functions
+// ==============================================
+
+function toggleHeaderVisibility() {
+    const header = document.querySelector('header');
+    const hideHeaderBtn = document.getElementById('hide-header-btn');
+    
+    if (header.classList.contains('hidden')) {
+        header.classList.remove('hidden');
+        if (hideHeaderBtn) hideHeaderBtn.textContent = '↑';
+    } else {
+        header.classList.add('hidden');
+        if (hideHeaderBtn) hideHeaderBtn.textContent = '↓';
+    }
+}
+
+function toggleBookmark() {
+    if (state.sentences.length === 0) return;
+    
+    const currentSentence = state.sentences[state.currentSentenceIndex];
+    const index = state.bookmarks.findIndex(b => b.id === currentSentence.id);
+    
+    if (index === -1) {
+        // Add to bookmarks
+        state.bookmarks.push({
+            id: currentSentence.id,
+            sentence: currentSentence.original,
+            translation: currentSentence.cached_translation || '',
+            date: new Date().toISOString()
+        });
+        document.getElementById('favorite-sentence-btn').classList.add('active');
+        showToast('Added to bookmarks!', 'success');
+    } else {
+        // Remove from bookmarks
+        state.bookmarks.splice(index, 1);
+        document.getElementById('favorite-sentence-btn').classList.remove('active');
+        showToast('Removed from bookmarks', 'error');
+    }
+    
+    localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+    renderBookmarks();
+}
+
+// ==============================================
+// Voice Input
+// ==============================================
+
+function startVoiceInput(lang, targetId, buttonElement) {
+    try {
+        if (!('webkitSpeechRecognition' in window)) {
+            showToast('Voice input not supported in your browser', 'error');
+            return;
+        }
+
+        const originalButtonContent = buttonElement.innerHTML;
+        buttonElement.innerHTML = '🔴 Listening...';
+        
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = lang;
+        recognition.interimResults = false;
+        
+        recognition.onstart = () => {
+            showToast('Listening...', 'info');
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById(targetId).value = transcript;
+            
+            // Update character count
+            const charCountElement = targetId === 'text-input' ? 
+                document.getElementById('char-count') : 
+                document.getElementById('translate-char-count');
+            charCountElement.textContent = transcript.length;
+            
+            showToast('Speech recognized!', 'success');
+        };
+
+        recognition.onerror = (event) => {
+            let errorMessage = 'Voice input error';
+            switch(event.error) {
+                case 'not-allowed':
+                    errorMessage = 'Microphone access denied. Please allow microphone access.';
+                    break;
+                case 'no-speech':
+                    errorMessage = 'No speech detected. Try again.';
+                    break;
+                case 'audio-capture':
+                    errorMessage = 'Audio capture error. Check your microphone.';
+                    break;
+                case 'network':
+                    errorMessage = 'Network error occurred. Check your connection.';
+                    break;
+                default:
+                    errorMessage = `Voice input error: ${event.error}`;
+            }
+            showToast(errorMessage, 'error');
+            buttonElement.innerHTML = originalButtonContent;
+        };
+
+        recognition.onend = () => {
+            buttonElement.innerHTML = originalButtonContent;
+        };
+
+        recognition.start();
+    } catch (error) {
+        console.error('Voice input error:', error);
+        showToast('Voice input failed. Please ensure you\'re on HTTPS and have granted microphone permissions.', 'error');
+        buttonElement.innerHTML = originalButtonContent;
+    }
+}
+
+// ==============================================
+// Event Listeners Setup
+// ==============================================
+
+function setupEventListeners() {
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    
+    // Sound toggle
+    document.getElementById('sound-toggle').addEventListener('click', toggleSounds);
+    
+    // Header toggle
+    const hideHeaderBtn = document.getElementById('hide-header-btn');
+    if (hideHeaderBtn) {
+        hideHeaderBtn.addEventListener('click', toggleHeaderVisibility);
+    }
+    
+    // Favorite button
+    const favoriteBtn = document.getElementById('favorite-sentence-btn');
+    if (favoriteBtn) {
+        favoriteBtn.addEventListener('click', toggleBookmark);
+    }
+    
+    // Voice input buttons
+    document.querySelectorAll('[id^="voice-input-btn"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetId = this.id === 'voice-input-btn' ? 'text-input' : 'translate-input';
+            const lang = this.id === 'voice-input-btn' ? state.targetLanguage : state.sourceLanguage;
+            startVoiceInput(LANGUAGES[lang]?.ttsLang || 'en-US', targetId, this);
+        });
+    });
+    
+    // Add all other event listeners from the original HTML file
+    // (navigation, buttons, etc.)
     // ...
 }
 
-// Start the app
+// ==============================================
+// Initialization
+// ==============================================
+
+async function initApp() {
+    try {
+        // Initialize database
+        db = await openDatabase();
+        
+        // Load settings
+        await loadSettings();
+        
+        // Initialize audio
+        initAudio();
+        
+        // Set up event listeners
+        setupEventListeners();
+        
+        // Apply theme and settings
+        applySettings();
+        
+        // Check online status
+        updateOnlineStatus();
+        
+        // Load any existing sentences
+        state.sentences = await getAllSentences(state.targetLanguage);
+        if (state.sentences.length > 0) {
+            showView('reading-view');
+        }
+        
+        // Update UI
+        updateBucketCounts();
+        updateLanguageUI();
+        
+    } catch (error) {
+        console.error('Initialization error:', error);
+        showToast('Failed to initialize app', 'error');
+        
+        // Try to recover by deleting and recreating the database
+        try {
+            if (db) db.close();
+            
+            await new Promise((resolve, reject) => {
+                const req = indexedDB.deleteDatabase(DB_NAME);
+                req.onsuccess = () => resolve();
+                req.onerror = (event) => reject(event.target.error);
+                req.onblocked = () => window.location.reload();
+            });
+            
+            window.location.reload();
+        } catch (recoveryError) {
+            console.error('Recovery failed:', recoveryError);
+            showToast('Failed to initialize app. Please refresh the page.', 'error');
+        }
+    }
+}
+
+// Start the app when DOM is loaded
 window.addEventListener('DOMContentLoaded', initApp);
