@@ -143,32 +143,32 @@
                     <h2>英語テキストをインポート <span role="img" aria-label="English">🇬🇧</span></h2>
                 </div>
 
-                <!-- Translate Section -->
-                <div id="translate-container" class="text-import-container" style="display: none;">
-                    <h2>日本語から英語に翻訳 <span role="img" aria-label="From Japanese to English">🇯🇵 → 🇬🇧</span></h2>
-                    <p>英語に翻訳するために日本語のテキストを入力または音声入力してください (最大5,000文字)</p>
-                    <textarea class="text-input" id="translate-input" placeholder="例: 猫が寝ています。犬が走っています..." aria-label="Translation input"></textarea>
-                    <div class="char-count"><span id="translate-char-count">0</span>/5000 文字</div>
-                    <div class="input-actions" style="gap: 0.5rem; margin-bottom: 1rem;">
-                        <button id="paste-btn-translate" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="貼り付け">
-                            <span>📋 貼り付け</span>
-                        </button>
-                        <button id="voice-input-btn-translate" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="音声入力">
-                            <span>🎤 音声入力</span>
-                        </button>
-                    </div>
-                    <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
-<button class="btn" id="translate-to-english" aria-label="翻訳">
-    <span>英語に翻訳</span>
-</button>
-                        <button class="btn" id="clear-text-translate" style="background-color: var(--danger); flex: 1;" aria-label="クリア">
-                            クリア
-                        </button>
-                        <button class="btn" id="show-history-btn-translate" style="background-color: var(--accent); width: 100%; margin-top: 0.5rem;" aria-label="履歴を表示">
-                            履歴を表示
-                        </button>
-                    </div>
-                </div>
+<!-- Translate Section -->
+<div id="translate-container" class="text-import-container" style="display: none;">
+    <h2>日本語から英語に翻訳 <span role="img" aria-label="From Japanese to English">🇯🇵 → 🇬🇧</span></h2>
+    <p>英語に翻訳するために日本語のテキストを入力または音声入力してください (最大5,000文字)</p>
+    <textarea class="text-input" id="translate-input" placeholder="例: 猫が寝ています。犬が走っています..." aria-label="Translation input"></textarea>
+    <div class="char-count"><span id="translate-char-count">0</span>/5000 文字</div>
+    <div class="input-actions" style="gap: 0.5rem; margin-bottom: 1rem;">
+        <button id="paste-btn-translate" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="貼り付け">
+            <span>📋 貼り付け</span>
+        </button>
+        <button id="voice-input-btn-translate" class="btn" style="background-color: var(--accent); flex: 1;" aria-label="音声入力">
+            <span>🎤 音声入力</span>
+        </button>
+    </div>
+    <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;">
+        <button class="btn" id="translate-to-english" aria-label="翻訳" style="flex: 1;">
+            <span>英語に翻訳</span>
+        </button>
+        <button class="btn" id="clear-text-translate" style="background-color: var(--danger); flex: 1;" aria-label="クリア">
+            クリア
+        </button>
+        <button class="btn" id="show-history-btn-translate" style="background-color: var(--accent); width: 100%; margin-top: 0.5rem;" aria-label="履歴を表示">
+            履歴を表示
+        </button>
+    </div>
+</div>
                 
                 <div class="resources-container">
                     <h3 class="resources-title">📚 英語学習リソース</h3>
@@ -225,12 +225,12 @@
                     <button class="control-btn" id="tts-button" aria-label="音声読み上げ">🔊</button>
                     <button class="control-btn" id="next-sentence" aria-label="次の文章">→</button>
                 </div>
-                <select id="translation-lang" class="lang-selector" aria-label="翻訳言語">
-                    <option value="ja">日本語</option>
-                    <option value="en">英語</option>
-                    <option value="es">スペイン語</option>
-                    <option value="fr">フランス語</option>
-                </select>
+<select id="translation-lang" class="lang-selector" aria-label="翻訳言語">
+    <option value="ja">日本語</option>
+    <option value="en">英語</option>
+    <option value="es">スペイン語</option>
+    <option value="fr">フランス語</option>
+</select>
             </section>
             
             <section id="vocab-review-view" class="view">
