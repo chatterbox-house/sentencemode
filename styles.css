@@ -776,24 +776,31 @@ h2 {
 .mode-toggle {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-bottom: 1rem;
+    background-color: var(--card-bg);
+    padding: 0.5rem;
+    border-radius: 12px;
 }
 
 .mode-toggle-btn {
     background-color: var(--accent);
     color: var(--text);
     border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
-    font-size: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .mode-toggle-btn.active {
     background-color: var(--highlight);
     color: white;
+    font-weight: bold;
 }
 
 /* Jump Controls */
