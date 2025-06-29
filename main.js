@@ -1260,41 +1260,7 @@ const STORE_SETTINGS = 'settings';
 let db;
 
 // Initialize IndexedDB
-async function openDatabase() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        
-        request.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            
-            if (!db.objectStoreNames.contains(STORE_SENTENCES)) {
-                const sentencesStore = db.createObjectStore(STORE_SENTENCES, { keyPath: 'id' });
-                sentencesStore.createIndex('position', 'position', { unique: true });
-                sentencesStore.createIndex('language', 'language', { unique: false });
-            }
-            
-            if (!db.objectStoreNames.contains(STORE_VOCAB)) {
-                const vocabStore = db.createObjectStore(STORE_VOCAB, { keyPath: 'id' });
-                vocabStore.createIndex('bucket', 'bucket', { unique: false });
-                vocabStore.createIndex('word', 'word', { unique: false }); // No longer unique for multiple languages
-                vocabStore.createIndex('language', 'language', { unique: false });
-            }
-            
-            if (!db.objectStoreNames.contains(STORE_TRANSLATIONS)) {
-                const translationsStore = db.createObjectStore(STORE_TRANSLATIONS, { keyPath: 'id' });
-                translationsStore.createIndex('text', 'text', { unique: false });
-                translationsStore.createIndex('languagePair', 'languagePair', { unique: false });
-            }
-            
-            if (!db.objectStoreNames.contains(STORE_SETTINGS)) {
-                db.createObjectStore(STORE_SETTINGS, { keyPath: 'name' });
-            }
-        };
-        
-        request.onsuccess = (event) => resolve(event.target.result);
-        request.onerror = (event) => reject(event.target.error);
-    });
-}
+
 
 // Database operations
 async function addSentences(sentences, language) {
