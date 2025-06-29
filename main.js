@@ -1072,10 +1072,7 @@ function syncScroll(scrolledElement, otherElement) {
 /* ========================
    UTILITY FUNCTIONS
    ======================== */
-    function closeSettings() {
-        document.getElementById('settings-panel').classList.remove('open');
-        document.getElementById('settings-overlay').classList.remove('open');
-    }
+
     
     // Navigation
     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1170,6 +1167,11 @@ document.getElementById('settings-btn').addEventListener('click', () => {
 
 document.getElementById('close-settings').addEventListener('click', closeSettings);
 document.getElementById('settings-overlay').addEventListener('click', closeSettings);
+
+       function closeSettings() {
+        document.getElementById('settings-panel').classList.remove('open');
+        document.getElementById('settings-overlay').classList.remove('open');
+    }
  // Text input
 document.getElementById('text-input').addEventListener('input', updateCharCount);
 document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);  
