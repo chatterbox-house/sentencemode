@@ -46,7 +46,18 @@ const state = {
     selectedCards: [],
     currentTtsUtterance: null,
     wordLookupCache: {},
-    bookmarks: JSON.parse(localStorage.getItem('bookmarks')) || []
+    bookmarks: JSON.parse(localStorage.getItem('bookmarks')) || [],
+        import { 
+    shuffleArray,
+    generateUUID,
+    showToast,
+    detectLanguage,
+    splitSentences,
+    syncScroll,
+    toggleHeaderVisibility,
+    createWordCard,
+    debounce
+} from './utilities.js';
 };
 
 // DOM Elements
