@@ -120,20 +120,20 @@ const languageConfig = {
         ],
         sentenceEndings: ['。', '！', '？', '\n']
     },
-    en: {  // For English-for-Japanese
-        ttsLang: 'en-US',
-        dictionaryAPI: 'https://api.dictionaryapi.dev/api/v2/entries/en',
-        placeholderText: 'Example: The cat is sleeping. The dog is running...',
-        importTitle: 'Import English Text',
-        translateTo: 'Translate to English',
-        resourceLinks: [
-            { name: 'VOA Learning English', url: 'https://learningenglish.voanews.com/' },
-            { name: 'BBC Learning English', url: 'https://www.bbc.co.uk/learningenglish/' },
-            { name: 'TED Talks', url: 'https://www.ted.com/talks?language=ja' },
-            { name: 'NHK英語講座', url: 'https://www.nhk.or.jp/lesson/english/' }
-        ],
-        sentenceEndings: ['.', '!', '?', '\n']
-    }
+en: {  // For English-for-Japanese
+    ttsLang: 'en-US',
+    dictionaryAPI: 'https://api.dictionaryapi.dev/api/v2/entries/en',
+    placeholderText: 'Example: The cat is sleeping. The dog is running...',
+    importTitle: 'Import English Text',
+    translateTo: 'Translate to English',
+    resourceLinks: [
+        { name: 'VOA Learning English', url: 'https://learningenglish.voanews.com/' },
+        { name: 'BBC Learning English', url: 'https://www.bbc.co.uk/learningenglish/' },
+        { name: 'TED Talks', url: 'https://www.ted.com/talks?language=ja' },
+        { name: 'NHK英語講座', url: 'https://www.nhk.or.jp/lesson/english/' }
+    ],
+    sentenceEndings: ['.', '!', '?', '\n']
+}
 };
 
 /* ========================
