@@ -95,7 +95,39 @@ const state = {
     selectedCards: [],
     lastDeleted: null
 };
+// ==============================================
+// Touch Event Handlers
+// ==============================================
 
+function handleTouchStart(event) {
+    // Store touch position for later comparison
+    state.touchStartX = event.touches[0].clientX;
+    state.touchStartY = event.touches[0].clientY;
+}
+
+function handleTouchEnd(event) {
+    if (!state.touchStartX || !state.touchStartY) return;
+    
+    const touchEndX = event.changedTouches[0].clientX;
+    const touchEndY = event.changedTouches[0].clientY;
+    const diffX = state.touchStartX - touchEndX;
+    const diffY = state.touchStartY - touchEndY;
+    
+    // Only consider horizontal swipes
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 50) {
+            // Swipe left - go to next sentence
+            document.getElementById('next-sentence').click();
+        } else if (diffX < -50) {
+            // Swipe right - go to previous sentence
+            document.getElementById('prev-sentence').click();
+        }
+    }
+    
+    // Clear touch positions
+    state.touchStartX = null;
+    state.touchStartY = null;
+}
 // ==============================================
 // Database Operations
 // ==============================================
