@@ -1,12 +1,12 @@
 /**
- * General utility functions for JapLearner app
+ * General utility functions for Japanese Learning App
  * @module utilities
  */
 
 /**
  * Shuffles an array in place using Fisher-Yates algorithm
  * @param {Array} array - The array to shuffle
- * @returns {Array} The shuffled array (same reference)
+ * @returns {Array} The shuffled array (original array is modified)
  */
 export function shuffleArray(array) {
     const newArray = [...array];
@@ -18,8 +18,8 @@ export function shuffleArray(array) {
 }
 
 /**
- * Generates a RFC4122 compliant UUID v4
- * @returns {string} Generated UUID
+ * Generates a v4 UUID
+ * @returns {string} A random UUID
  */
 export function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -33,30 +33,32 @@ export function generateUUID() {
  * Shows a toast notification
  * @param {string} message - The message to display
  * @param {string} [type=''] - Type of toast ('success', 'error', etc.)
- * @param {number} [duration=3000] - How long to show the toast in ms
+ * @param {HTMLElement} [toastElement] - Optional toast element
  */
-export function showToast(message, type = '', duration = 3000) {
-    const toast = document.getElementById('toast');
-    if (!toast) return;
+export function showToast(message, type = '', toastElement) {
+    if (!toastElement) {
+        toastElement = document.getElementById('toast');
+        if (!toastElement) return;
+    }
 
-    toast.textContent = message;
-    toast.className = 'toast';
+    toastElement.textContent = message;
+    toastElement.className = 'toast';
     
     if (type) {
-        toast.classList.add(type);
+        toastElement.classList.add(type);
     }
     
-    toast.classList.add('show');
+    toastElement.classList.add('show');
     
     setTimeout(() => {
-        toast.classList.remove('show');
-    }, duration);
+        toastElement.classList.remove('show');
+    }, 3000);
 }
 
 /**
- * Simple language detection based on character ranges
- * @param {string} text - Text to analyze
- * @returns {string} Detected language code ('ja' or 'en')
+ * Detects if text contains Japanese characters
+ * @param {string} text - The text to analyze
+ * @returns {string} 'ja' if Japanese detected, 'en' otherwise
  */
 export function detectLanguage(text) {
     const japaneseChars = /[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF]/;
@@ -64,9 +66,9 @@ export function detectLanguage(text) {
 }
 
 /**
- * Splits text into sentences using Japanese punctuation
+ * Splits text into Japanese sentences
  * @param {string} text - The text to split
- * @returns {string[]} Array of sentences
+ * @returns {Array<string>} Array of sentences
  */
 export function splitSentences(text) {
     const roughSentences = text.split(/(?<=[。！？\n])/);
@@ -91,42 +93,13 @@ export function splitSentences(text) {
 }
 
 /**
- * Synchronizes scroll position between two columns
- * @param {Event} e - Scroll event
- */
-export function syncScroll(e) {
-    const scrolledColumn = e.target;
-    const otherColumn = scrolledColumn === document.getElementById('left-column') 
-        ? document.getElementById('right-column') 
-        : document.getElementById('left-column');
-    
-    otherColumn.removeEventListener('scroll', syncScroll);
-    otherColumn.scrollTop = scrolledColumn.scrollTop;
-    setTimeout(() => {
-        otherColumn.addEventListener('scroll', syncScroll);
-    }, 10);
-}
-
-/**
- * Toggles header visibility in review mode
- */
-export function toggleHeaderVisibility() {
-    const header = document.querySelector('header');
-    const hideHeaderBtn = document.getElementById('hide-header-btn');
-    
-    if (header.classList.contains('hidden')) {
-        header.classList.remove('hidden');
-        hideHeaderBtn.textContent = '↑';
-    } else {
-        header.classList.add('hidden');
-        hideHeaderBtn.textContent = '↓';
-    }
-}
-
-/**
- * Creates a word card DOM element for matching game
+ * Creates a DOM element for a vocabulary card
  * @param {Object} word - Word data object
- * @returns {HTMLElement} Created card element
+ * @param {string} word.id - Word ID
+ * @param {string} word.type - 'english' or 'japanese'
+ * @param {string} word.text - The word text
+ * @param {number} word.streak - Current streak count
+ * @returns {HTMLElement} The created card element
  */
 export function createWordCard(word) {
     const card = document.createElement('div');
@@ -161,8 +134,29 @@ export function createWordCard(word) {
 }
 
 /**
+ * Synchronizes scroll between two elements
+ * @param {HTMLElement} element1 - First element
+ * @param {HTMLElement} element2 - Second element
+ */
+export function setupScrollSync(element1, element2) {
+    const syncScroll = (e) => {
+        const scrolledColumn = e.target;
+        const otherColumn = scrolledColumn === element1 ? element2 : element1;
+        
+        otherColumn.removeEventListener('scroll', syncScroll);
+        otherColumn.scrollTop = scrolledColumn.scrollTop;
+        setTimeout(() => {
+            otherColumn.addEventListener('scroll', syncScroll);
+        }, 10);
+    };
+
+    element1.addEventListener('scroll', syncScroll);
+    element2.addEventListener('scroll', syncScroll);
+}
+
+/**
  * Debounces a function to limit execution rate
- * @param {Function} func - Function to debounce
+ * @param {Function} func - The function to debounce
  * @param {number} delay - Delay in milliseconds
  * @returns {Function} Debounced function
  */
