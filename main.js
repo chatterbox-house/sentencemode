@@ -1160,18 +1160,22 @@ function setupEventListeners() {
     document.getElementById('sound-toggle').addEventListener('click', toggleSounds);
     
 // Settings panel
-document.getElementById('settings-btn').addEventListener('click', () => {
-    document.getElementById('settings-panel').classList.add('open');
-    document.getElementById('settings-overlay').classList.add('open');
-});
-
-document.getElementById('close-settings').addEventListener('click', closeSettings);
-document.getElementById('settings-overlay').addEventListener('click', closeSettings);
-
-       function closeSettings() {
-        document.getElementById('settings-panel').classList.remove('open');
-        document.getElementById('settings-overlay').classList.remove('open');
+function toggleSettings() {
+    const panel = document.getElementById('settings-panel');
+    const overlay = document.getElementById('settings-overlay');
+    
+    if (panel.classList.contains('open')) {
+        panel.classList.remove('open');
+        overlay.classList.remove('open');
+    } else {
+        panel.classList.add('open');
+        overlay.classList.add('open');
     }
+}
+
+document.getElementById('settings-btn').addEventListener('click', toggleSettings);
+document.getElementById('close-settings').addEventListener('click', toggleSettings);
+document.getElementById('settings-overlay').addEventListener('click', toggleSettings);
  // Text input
 document.getElementById('text-input').addEventListener('input', updateCharCount);
 document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);  
