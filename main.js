@@ -16,6 +16,7 @@ const state = {
         correct: 0,
         incorrect: 0
     },
+    const languageManager = new LanguageManager(db, state);,
     theme: localStorage.getItem('theme') || 'dark',
     soundsEnabled: localStorage.getItem('soundsEnabled') !== 'false',
     audioContext: null,
