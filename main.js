@@ -1222,14 +1222,6 @@ function toggleTheme() {
 }
 
 
-// Database configuration
-const DB_NAME = 'LanguageLearnerDB';
-const DB_VERSION = 3; // Updated version for language support
-const STORE_SENTENCES = 'sentences';
-const STORE_VOCAB = 'vocabulary';
-const STORE_TRANSLATIONS = 'translations';
-const STORE_SETTINGS = 'settings';
-
 let db;
 
 // Initialize IndexedDB
