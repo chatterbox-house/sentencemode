@@ -191,7 +191,7 @@ async function wipeAllData() {
     });
 }
 
-async function addSentences(sentences) {
+async function addSentences(sentences, language = state.sourceLanguage) {
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORE_SENTENCES], 'readwrite');
         const store = transaction.objectStore(STORE_SENTENCES);
@@ -199,7 +199,7 @@ async function addSentences(sentences) {
         store.clear().onsuccess = () => {
             sentences.forEach((sentence, index) => {
                 sentence.position = index;
-                sentence.language = state.sourceLanguage;
+                sentence.language = language;
                 store.add(sentence);
             });
             
@@ -209,14 +209,20 @@ async function addSentences(sentences) {
     });
 }
 
-async function getAllSentences() {
+async function getAllSentences(language) {
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORE_SENTENCES], 'readonly');
         const store = transaction.objectStore(STORE_SENTENCES);
         const index = store.index('position');
         const request = index.getAll();
         
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+            if (language) {
+                resolve(request.result.filter(s => s.language === language));
+            } else {
+                resolve(request.result);
+            }
+        };
         request.onerror = (event) => reject(event.target.error);
     });
 }
@@ -1220,41 +1226,8 @@ let db;
 
 
 // Database operations
-async function addSentences(sentences, language) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction([STORE_SENTENCES], 'readwrite');
-        const store = transaction.objectStore(STORE_SENTENCES);
-        
-        store.clear().onsuccess = () => {
-            sentences.forEach((sentence, index) => {
-                sentence.position = index;
-                sentence.language = language;
-                store.add(sentence);
-            });
-            
-            transaction.oncomplete = () => resolve();
-            transaction.onerror = (event) => reject(event.target.error);
-        };
-    });
-}
 
-async function getAllSentences(language) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction([STORE_SENTENCES], 'readonly');
-        const store = transaction.objectStore(STORE_SENTENCES);
-        const index = store.index('position');
-        const request = index.getAll();
-        
-        request.onsuccess = () => {
-            if (language) {
-                resolve(request.result.filter(s => s.language === language));
-            } else {
-                resolve(request.result);
-            }
-        };
-        request.onerror = (event) => reject(event.target.error);
-    });
-}
+
 
 async function addVocabWord(word) {
     return new Promise((resolve, reject) => {
