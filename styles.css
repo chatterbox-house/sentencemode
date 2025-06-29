@@ -77,7 +77,6 @@ body {
 
 /* Header Styles */
 header {
-    background-color: var(--secondary);
     padding: 1rem;
     position: sticky;
     top: 0;
@@ -147,7 +146,7 @@ header.hidden {
     position: fixed;
     top: 0;
     right: -300px;
-    width: 300px;
+    width: min(300px, 90vw);
     height: 100vh;
     background-color: var(--secondary);
     box-shadow: var(--shadow);
@@ -155,7 +154,7 @@ header.hidden {
     padding: 1.5rem;
     transition: right 0.3s ease;
     overflow-y: auto;
-    display: none; /* Add this line */
+    display: none;
 }
 
 .settings-panel.open {
@@ -569,7 +568,7 @@ h2 {
     gap: 0.5rem;
     min-height: 0;
     padding: 0.5rem;
-    overflow-y: auto;
+    overflow-y: hidden; /* Changed from auto to hidden */
 }
 
 .matching-column {
@@ -581,6 +580,7 @@ h2 {
     gap: 0.5rem;
     justify-content: flex-start;
     align-items: center;
+    overflow-y: auto; /* Moved overflow to columns */
 }
 
 .word-card {
@@ -1014,8 +1014,13 @@ h2 {
     }
     
     .matching-game-columns {
-        gap: 0.3rem;
-        padding: 0.3rem;
+        flex-direction: row;
+        gap: 0.5rem;
+        overflow-y: hidden;
+    }
+    
+    .matching-column {
+        overflow-y: auto;
     }
     
     .word-card {
@@ -1037,16 +1042,10 @@ h2 {
         font-size: 0.9rem !important;
         padding: 0.5rem !important;
     }
-    
-    .theme-toggle, .settings-btn {
-        width: 35px !important;
-        height: 35px !important;
-        font-size: 1rem !important;
-    }
-    
-    header {
+      header {
         padding: 0.5rem;
         gap: 0.5rem;
+        flex-wrap: wrap;
     }
     
     .logo {
@@ -1054,27 +1053,21 @@ h2 {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 30%;
+        max-width: 40%;
+        order: 1;
     }
     
     .nav-tabs {
-        flex: 1;
+        flex: 1 0 100%;
+        order: 3;
         justify-content: center;
         gap: 0.2rem;
-    }
-    
-    .nav-btn {
-        padding: 0.4rem 0.6rem !important;
-        font-size: 0.75rem !important;
-        min-width: unset;
+        margin-top: 0.5rem;
     }
     
     .theme-toggle, .settings-btn {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 0.9rem !important;
-        margin-left: 0.25rem !important;
-        flex-shrink: 0;
+        order: 2;
+        margin-left: auto;
     }
     
     .sentence-display {
@@ -1122,16 +1115,6 @@ h2 {
         font-size: 1.5rem;
     }
     
-    .matching-game-columns {
-        flex-direction: row;
-        gap: 0.5rem;
-    }
-    
-    .matching-column {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
     
     .word-card {
         padding: 1rem;
@@ -1190,8 +1173,9 @@ h2 {
     }
     
     .settings-panel {
-        width: 100%;
-        right: -100%;
+        width: 90vw;
+        right: -90vw;
+        padding: 1rem;
     }
     
     .settings-panel.open {
@@ -1241,7 +1225,14 @@ h2 {
     }
     
     main {
-        padding-bottom: 80px;
+        padding: 1rem;
+        padding-bottom: 120px; /* Increased to accommodate controls */
+        min-height: calc(100vh - 60px); /* Adjust based on header height */
+    }
+    
+    .app-container {
+        height: auto;
+        min-height: 100vh;
     }
     
     .review-question {
