@@ -3,151 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SentenceMODE - Language Selection</title>
+    <title>Language Learning Hub</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Additional styles for the language selector page */
-        .language-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            text-align: center;
-        }
-        
-        .language-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--highlight);
-        }
-        
         .language-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
         
         .language-card {
-            background-color: var(--card-bg);
+            background: #1a1a2e;
             border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.2s ease;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s;
             cursor: pointer;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 150px;
         }
         
         .language-card:hover {
             transform: translateY(-5px);
-            background-color: var(--accent);
-        }
-        
-        .language-flag {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            background: #0f3460;
         }
         
         .language-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #e94560;
         }
         
-        .language-description {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .language-direction {
+            color: #b8b8b8;
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <div class="logo">SentenceMODE</div>
-            <div>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
-            </div>
-        </header>
+    <header>
+        <div class="logo">LangLearner</div>
+    </header>
+    
+    <main>
+        <h1 style="text-align: center; margin: 2rem 0; color: #e94560;">Choose Your Learning Path</h1>
         
-        <main>
-            <div class="language-container">
-                <h1 class="language-title">Select Your Learning Language</h1>
-                <p>Choose the language you want to learn with SentenceMODE</p>
-                
-                <div class="language-grid">
-                    <!-- Japanese for English Speakers -->
-                    <a href="japanese.html" class="language-card">
-                        <div class="language-flag">🇯🇵</div>
-                        <div class="language-name">Japanese</div>
-                        <div class="language-description">For English speakers</div>
-                    </a>
-                    
-                    <!-- English for Japanese Speakers -->
-                    <a href="english-for-japanese.html" class="language-card">
-                        <div class="language-flag">🇬🇧</div>
-                        <div class="language-name">English</div>
-                        <div class="language-description">For Japanese speakers</div>
-                    </a>
-                    
-                    <!-- Spanish for English Speakers -->
-                    <a href="spanish.html" class="language-card">
-                        <div class="language-flag">🇪🇸</div>
-                        <div class="language-name">Spanish</div>
-                        <div class="language-description">For English speakers</div>
-                    </a>
-                    
-                    <!-- French for English Speakers -->
-                    <a href="french.html" class="language-card">
-                        <div class="language-flag">🇫🇷</div>
-                        <div class="language-name">French</div>
-                        <div class="language-description">For English speakers</div>
-                    </a>
-                    
-                    <!-- German for English Speakers -->
-                    <a href="german.html" class="language-card">
-                        <div class="language-flag">🇩🇪</div>
-                        <div class="language-name">German</div>
-                        <div class="language-description">For English speakers</div>
-                    </a>
-                    
-                    <!-- Chinese for English Speakers -->
-                    <a href="chinese.html" class="language-card">
-                        <div class="language-flag">🇨🇳</div>
-                        <div class="language-name">Chinese</div>
-                        <div class="language-description">For English speakers</div>
-                    </a>
-                </div>
+        <div class="language-grid">
+            <!-- English to Japanese -->
+            <div class="language-card" onclick="navigateToLanguage('japanese', 'en', 'ja')">
+                <div class="language-name">Japanese</div>
+                <div class="language-direction">English → Japanese</div>
             </div>
-        </main>
-    </div>
+            
+            <!-- Japanese to English -->
+            <div class="language-card" onclick="navigateToLanguage('japanese', 'ja', 'en')">
+                <div class="language-name">Japanese</div>
+                <div class="language-direction">Japanese → English</div>
+            </div>
+            
+            <!-- English to Spanish -->
+            <div class="language-card" onclick="navigateToLanguage('spanish', 'en', 'es')">
+                <div class="language-name">Spanish</div>
+                <div class="language-direction">English → Spanish</div>
+            </div>
+            
+            <!-- Japanese to Spanish -->
+            <div class="language-card" onclick="navigateToLanguage('spanish', 'ja', 'es')">
+                <div class="language-name">Spanish</div>
+                <div class="language-direction">Japanese → Spanish</div>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // Theme toggle functionality for the index page
-        const themeToggle = document.getElementById('theme-toggle');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-        
-        themeToggle.addEventListener('click', () => {
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeToggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
-        });
-        
-        // Apply saved font preferences
-        const savedFont = localStorage.getItem('font') || 'system';
-        document.documentElement.setAttribute('data-font', savedFont);
-        
-        const savedFontSize = localStorage.getItem('fontSize') || '16';
-        document.documentElement.style.setProperty('--font-size', `${savedFontSize}px`);
-        
-        const savedLineHeight = localStorage.getItem('lineHeight') || '1.6';
-        document.documentElement.style.setProperty('--line-height', savedLineHeight);
+        function navigateToLanguage(page, sourceLang, targetLang) {
+            // Store language configuration
+            localStorage.setItem('langConfig', JSON.stringify({
+                source: sourceLang,
+                target: targetLang
+            }));
+            
+            // Redirect to language page
+            window.location.href = `${page}.html`;
+        }
     </script>
 </body>
 </html>
