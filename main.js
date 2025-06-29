@@ -1159,14 +1159,14 @@ function setupEventListeners() {
     // Sound toggle
     document.getElementById('sound-toggle').addEventListener('click', toggleSounds);
     
-    // Settings panel
-    document.getElementById('settings-btn').addEventListener('click', () => {
-        document.getElementById('settings-panel').classList.add('open');
-        document.getElementById('settings-overlay').classList.add('open');
-    });
-    
-    document.getElementById('close-settings').addEventListener('click', closeSettings);
-    document.getElementById('settings-overlay').addEventListener('click', closeSettings);
+// Settings panel
+document.getElementById('settings-btn').addEventListener('click', () => {
+    document.getElementById('settings-panel').classList.add('open');
+    document.getElementById('settings-overlay').classList.add('open');
+});
+
+document.getElementById('close-settings').addEventListener('click', closeSettings);
+document.getElementById('settings-overlay').addEventListener('click', closeSettings);
     
     function updateCharCount() {
         document.getElementById('char-count').textContent = document.getElementById('text-input').value.length;
