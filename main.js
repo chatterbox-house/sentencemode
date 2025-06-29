@@ -628,7 +628,15 @@ function showWordTooltip(word, x, y) {
         }
     };
 }
+function handleTouchStart(event) {
+    // Prevent default to avoid scrolling issues
+    event.preventDefault();
+    // You can add touch-specific logic here if needed
+}
 
+function handleTouchEnd(event) {
+    // Handle touch end events if needed
+}
 function displayTooltip(text, x, y) {
     const wordTooltip = document.getElementById('word-tooltip');
     if (!wordTooltip) return;
