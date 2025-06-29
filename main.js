@@ -77,6 +77,62 @@ const languageConfig = {
             { name: 'DW Español', url: 'https://www.dw.com/es/' }
         ],
         sentenceEndings: ['.', '¡', '¿', '\n']
+    },
+       fr: {
+        ttsLang: 'fr-FR',
+        dictionaryAPI: 'https://api.dictionaryapi.dev/api/v2/entries/fr',
+        placeholderText: 'Exemple: Le chat dort. Le chien court...',
+        importTitle: 'Import French Text',
+        translateTo: 'Translate to French',
+        resourceLinks: [
+            { name: 'RFI Français Facile', url: 'https://www.rfi.fr/fr/' },
+            { name: 'Le Monde', url: 'https://www.lemonde.fr/' },
+            { name: 'France 24', url: 'https://www.france24.com/fr/' },
+            { name: 'TV5Monde', url: 'https://www.tv5monde.com/' }
+        ],
+        sentenceEndings: ['.', '!', '?', '\n']
+    },
+    de: {
+        ttsLang: 'de-DE',
+        dictionaryAPI: 'https://api.dictionaryapi.dev/api/v2/entries/de',
+        placeholderText: 'Beispiel: Die Katze schläft. Der Hund rennt...',
+        importTitle: 'Import German Text',
+        translateTo: 'Translate to German',
+        resourceLinks: [
+            { name: 'DW Learn German', url: 'https://www.dw.com/en/learn-german/s-2469' },
+            { name: 'Goethe Institut', url: 'https://www.goethe.de/en/index.html' },
+            { name: 'Tagesschau', url: 'https://www.tagesschau.de/' },
+            { name: 'Der Spiegel', url: 'https://www.spiegel.de/' }
+        ],
+        sentenceEndings: ['.', '!', '?', '\n']
+    },
+    zh: {
+        ttsLang: 'zh-CN',
+        dictionaryAPI: 'https://api.dictionaryapi.dev/api/v2/entries/zh',
+        placeholderText: '例如: 猫在睡觉。狗在跑...',
+        importTitle: 'Import Chinese Text',
+        translateTo: 'Translate to Chinese',
+        resourceLinks: [
+            { name: 'The Chairman\'s Bao', url: 'https://www.thechairmansbao.com/' },
+            { name: 'BBC Chinese', url: 'https://www.bbc.com/zhongwen/simp' },
+            { name: 'ChinesePod', url: 'https://www.chinesepod.com/' },
+            { name: 'Du Chinese', url: 'https://www.duchinese.net/' }
+        ],
+        sentenceEndings: ['。', '！', '？', '\n']
+    },
+    en: {  // For English-for-Japanese
+        ttsLang: 'en-US',
+        dictionaryAPI: 'https://api.dictionaryapi.dev/api/v2/entries/en',
+        placeholderText: 'Example: The cat is sleeping. The dog is running...',
+        importTitle: 'Import English Text',
+        translateTo: 'Translate to English',
+        resourceLinks: [
+            { name: 'VOA Learning English', url: 'https://learningenglish.voanews.com/' },
+            { name: 'BBC Learning English', url: 'https://www.bbc.co.uk/learningenglish/' },
+            { name: 'TED Talks', url: 'https://www.ted.com/talks?language=ja' },
+            { name: 'NHK英語講座', url: 'https://www.nhk.or.jp/lesson/english/' }
+        ],
+        sentenceEndings: ['.', '!', '?', '\n']
     }
 };
 
