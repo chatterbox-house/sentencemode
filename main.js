@@ -434,7 +434,7 @@ async function lookupWordInDictionary(word, language = 'ja') {
         if (language === 'ja') {
             apiUrl = `https://jisho.org/api/v1/search/words?keyword=${encodeURIComponent(word)}`;
         } else {
-            // For other languages, we might use a different dictionary API
+            // For other LANGUAGE_CONFIG, we might use a different dictionary API
             apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`;
         }
         
@@ -662,15 +662,7 @@ function showWordTooltip(word, x, y) {
         }
     };
 }
-function handleTouchStart(event) {
-    // Prevent default to avoid scrolling issues
-    event.preventDefault();
-    // You can add touch-specific logic here if needed
-}
 
-function handleTouchEnd(event) {
-    // Handle touch end events if needed
-}
 function displayTooltip(text, x, y) {
     const wordTooltip = document.getElementById('word-tooltip');
     if (!wordTooltip) return;
@@ -1341,7 +1333,7 @@ function detectLanguage(text) {
 
 // Text processing
 function splitSentences(text, language) {
-    const langConfig = LANGUAGES[language] || LANGUAGES.en;
+    const langConfig = LANGUAGE_CONFIG[language] || LANGUAGE_CONFIG.en;
     const sentenceEndings = langConfig.sentenceEndings;
     
     const roughSentences = text.split(new RegExp(`(?<=${sentenceEndings.source})`));
@@ -1472,7 +1464,7 @@ function updateLanguageUI() {
     // Update placeholders and labels
     const textInput = document.getElementById('text-input');
     if (textInput) {
-        textInput.placeholder = LANGUAGES[state.targetLanguage]?.inputPlaceholder || 'Enter text...';
+        textInput.placeholder = LANGUAGE_CONFIG[state.targetLanguage]?.inputPlaceholder || 'Enter text...';
     }
     
     // Update resource links
@@ -1485,7 +1477,7 @@ function updateResourceLinks() {
     
     resourcesContainer.innerHTML = '';
     const currentLang = state.targetLanguage;
-    const langResources = LANGUAGES[currentLang]?.resources || [];
+    const langResources = LANGUAGE_CONFIG[currentLang]?.resources || [];
     
     langResources.forEach(resource => {
         const link = document.createElement('a');
@@ -1656,7 +1648,7 @@ async function loadSettings() {
             store.get('fontSize'),
             store.get('lineHeight'),
             store.get('autoTranslate'),
-            store.get('languageSettings')
+            store.get('LANGUAGE_CONFIGettings')
         ];
         
         let completed = 0;
@@ -1664,7 +1656,7 @@ async function loadSettings() {
         
         requests.forEach((request, index) => {
             request.onsuccess = () => {
-                const key = ['theme', 'font', 'fontSize', 'lineHeight', 'autoTranslate', 'languageSettings'][index];
+                const key = ['theme', 'font', 'fontSize', 'lineHeight', 'autoTranslate', 'LANGUAGE_CONFIGettings'][index];
                 results[key] = request.result?.value;
                 completed++;
                 
@@ -1694,10 +1686,10 @@ async function loadSettings() {
                         localStorage.setItem('autoTranslate', state.autoTranslate);
                     }
                     
-                    if (results.languageSettings) {
-                        state.sourceLanguage = results.languageSettings.source || 'en';
-                        state.targetLanguage = results.languageSettings.target || 'ja';
-                        localStorage.setItem('languageSettings', JSON.stringify({
+                    if (results.LANGUAGE_CONFIGettings) {
+                        state.sourceLanguage = results.LANGUAGE_CONFIGettings.source || 'en';
+                        state.targetLanguage = results.LANGUAGE_CONFIGettings.target || 'ja';
+                        localStorage.setItem('LANGUAGE_CONFIGettings', JSON.stringify({
                             source: state.sourceLanguage,
                             target: state.targetLanguage
                         }));
@@ -1897,7 +1889,7 @@ function setupEventListeners() {
             } else if (selector.id === 'target-lang') {
                 state.targetLanguage = e.target.value;
             }
-            localStorage.setItem('languageSettings', JSON.stringify({
+            localStorage.setItem('LANGUAGE_CONFIGettings', JSON.stringify({
                 source: state.sourceLanguage,
                 target: state.targetLanguage
             }));
@@ -1927,7 +1919,7 @@ function setupEventListeners() {
         btn.addEventListener('click', function() {
             const targetId = this.id === 'voice-input-btn' ? 'text-input' : 'translate-input';
             const lang = this.id === 'voice-input-btn' ? state.targetLanguage : state.sourceLanguage;
-            startVoiceInput(LANGUAGES[lang]?.ttsLang || 'en-US', targetId, this);
+            startVoiceInput(LANGUAGE_CONFIG[lang]?.ttsLang || 'en-US', targetId, this);
         });
     });
     
