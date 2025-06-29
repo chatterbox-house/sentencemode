@@ -1093,6 +1093,14 @@ function syncScroll(scrolledElement, otherElement) {
     // Text input
     document.getElementById('text-input').addEventListener('input', updateCharCount);
     document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);
+function updateCharCount() {
+    document.getElementById('char-count').textContent = document.getElementById('text-input').value.length;
+}
+
+function updateTranslateCharCount() {
+    document.getElementById('translate-char-count').textContent = 
+        document.getElementById('translate-input').value.length;
+}
     
 function shuffleArray(array) {
     const newArray = [...array];
@@ -1167,15 +1175,7 @@ document.getElementById('settings-btn').addEventListener('click', () => {
 
 document.getElementById('close-settings').addEventListener('click', closeSettings);
 document.getElementById('settings-overlay').addEventListener('click', closeSettings);
-    
-    function updateCharCount() {
-        document.getElementById('char-count').textContent = document.getElementById('text-input').value.length;
-    }
-    
-    function updateTranslateCharCount() {
-        document.getElementById('translate-char-count').textContent = 
-            document.getElementById('translate-input').value.length;
-    }
+   
     
     // Process text
     document.getElementById('process-text').addEventListener('click', processText);
