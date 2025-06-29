@@ -1134,11 +1134,11 @@ function setupHardMode() {
     
     // Update progress
     const progressText = document.getElementById('progress-text');
-    const progressFill = document.getElementById('progress-fill');
-    if (progressText && progressFill) {
-        progressText.textContent = `Word ${state.currentReviewIndex + 1}/${state.reviewWords.length}`;
-        progressFill.style.width = `${((state.currentReviewIndex + 1) / state.reviewWords.length) * 100}%`;
-    }
+const progressFillElement = document.getElementById('progress-fill');
+if (progressText && progressFillElement) {
+    progressText.textContent = `Word ${state.currentReviewIndex + 1}/${state.reviewWords.length}`;
+    progressFillElement.style.width = `${((state.currentReviewIndex + 1) / state.reviewWords.length) * 100}%`;
+}
 }
 
 function handleHardModeResponse(knewIt) {
