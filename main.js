@@ -1187,31 +1187,7 @@ function toggleTheme() {
     document.getElementById('theme-toggle').textContent = state.theme === 'dark' ? '🌙' : '☀️';
 }
 
-// Language configuration
-const LANGUAGES = {
-    ja: {
-        name: 'Japanese',
-        code: 'ja',
-        direction: 'ltr',
-        ttsLang: 'ja-JP',
-        sentenceEndings: /[。！？\n]/,
-        resources: [
-            { name: 'NHK Easy News', url: 'https://www3.nhk.or.jp/news/easy/' },
-            { name: 'Yahoo Japan News', url: 'https://news.yahoo.co.jp/' }
-        ]
-    },
-    en: {
-        name: 'English',
-        code: 'en',
-        direction: 'ltr',
-        ttsLang: 'en-US',
-        sentenceEndings: /[.!?\n]/,
-        resources: [
-            { name: 'Tatoeba Sentences', url: 'https://tatoeba.org/en' }
-        ]
-    }
-    // Add more languages as needed
-};
+
 
 // Core application state
 
