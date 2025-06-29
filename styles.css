@@ -143,7 +143,6 @@ header.hidden {
     color: var(--text);
 }
 
-/* Settings Panel */
 .settings-panel {
     position: fixed;
     top: 0;
@@ -156,10 +155,12 @@ header.hidden {
     padding: 1.5rem;
     transition: right 0.3s ease;
     overflow-y: auto;
+    display: none; /* Add this line */
 }
 
 .settings-panel.open {
     right: 0;
+    display: block; /* Add this line */
 }
 
 .settings-overlay {
