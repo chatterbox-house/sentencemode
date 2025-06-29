@@ -3,90 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Learning Hub</title>
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Language Learner Hub</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .language-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1000px;
+        /* Additional styles specific to the hub page */
+        .hub-container {
+            max-width: 800px;
             margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hub-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--highlight);
+            font-size: 2rem;
+        }
+        
+        .language-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
         
         .language-card {
-            background: #1a1a2e;
+            background-color: var(--card-bg);
             border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            transition: transform 0.3s;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            height: 100%;
         }
         
         .language-card:hover {
             transform: translateY(-5px);
-            background: #0f3460;
+        }
+        
+        .language-flag {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
         
         .language-name {
             font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #e94560;
+            margin-bottom: 0.5rem;
+            color: var(--highlight);
         }
         
         .language-direction {
-            color: #b8b8b8;
             font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .language-description {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .start-btn {
+            background-color: var(--highlight);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: auto;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        @media (max-width: 600px) {
+            .language-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hub-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">LangLearner</div>
-    </header>
-    
-    <main>
-        <h1 style="text-align: center; margin: 2rem 0; color: #e94560;">Choose Your Learning Path</h1>
+    <div class="app-container">
+        <header>
+            <div class="logo">Language Learner</div>
+            <div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+                <button class="settings-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+            </div>
+        </header>
         
-        <div class="language-grid">
-            <!-- English to Japanese -->
-            <div class="language-card" onclick="navigateToLanguage('japanese', 'en', 'ja')">
-                <div class="language-name">Japanese</div>
-                <div class="language-direction">English → Japanese</div>
+        <main class="hub-container">
+            <h1 class="hub-title">Choose Your Learning Path</h1>
+            
+            <div class="language-cards">
+                <div class="language-card" onclick="window.location.href='japanese.html'">
+                    <div class="language-flag">🇯🇵</div>
+                    <h2 class="language-name">Japanese</h2>
+                    <div class="language-direction">Learn Japanese from English</div>
+                    <div class="language-description">
+                        Perfect for English speakers who want to learn Japanese through reading, vocabulary building, 
+                        and sentence mining. Import Japanese texts or translate from English.
+                    </div>
+                    <button class="start-btn">Start Learning</button>
+                </div>
+                
+                <div class="language-card" onclick="window.location.href='english.html'">
+                    <div class="language-flag">🇬🇧</div>
+                    <h2 class="language-name">British English</h2>
+                    <div class="language-direction">Learn English from Japanese</div>
+                    <div class="language-description">
+                        Designed for Japanese speakers learning British English. Import English texts or 
+                        translate from Japanese with British spellings and pronunciations.
+                    </div>
+                    <button class="start-btn">Start Learning</button>
+                </div>
+            </div>
+        </main>
+        
+        <div class="settings-overlay" id="settings-overlay"></div>
+        <div class="settings-panel" id="settings-panel">
+            <div class="settings-title">
+                <span>Settings</span>
+                <button class="settings-btn" id="close-settings" aria-label="Close settings">✕</button>
             </div>
             
-            <!-- Japanese to English -->
-            <div class="language-card" onclick="navigateToLanguage('japanese', 'ja', 'en')">
-                <div class="language-name">Japanese</div>
-                <div class="language-direction">Japanese → English</div>
-            </div>
-            
-            <!-- English to Spanish -->
-            <div class="language-card" onclick="navigateToLanguage('spanish', 'en', 'es')">
-                <div class="language-name">Spanish</div>
-                <div class="language-direction">English → Spanish</div>
-            </div>
-            
-            <!-- Japanese to Spanish -->
-            <div class="language-card" onclick="navigateToLanguage('spanish', 'ja', 'es')">
-                <div class="language-name">Spanish</div>
-                <div class="language-direction">Japanese → Spanish</div>
+            <div class="settings-group">
+                <h3>Appearance</h3>
+                <label class="settings-label">Font Family</label>
+                <select class="settings-select" id="font-select">
+                    <option value="system">System UI</option>
+                    <option value="serif">Serif</option>
+                    <option value="sans-serif">Sans-serif</option>
+                </select>
+                
+                <label class="settings-label">Font Size</label>
+                <input type="range" class="settings-range" id="font-size-range" min="12" max="24" step="1" value="16">
+                
+                <label class="settings-label">Line Height</label>
+                <input type="range" class="settings-range" id="line-height-range" min="1.2" max="2.5" step="0.1" value="1.6">
+                
+                <label class="settings-label">Theme</label>
+                <select class="settings-select" id="theme-select">
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                    <option value="high-contrast">High Contrast</option>
+                </select>
             </div>
         </div>
-    </main>
+        
+        <div class="toast" id="toast"></div>
+    </div>
 
+    <script src="main.js"></script>
     <script>
-        function navigateToLanguage(page, sourceLang, targetLang) {
-            // Store language configuration
-            localStorage.setItem('langConfig', JSON.stringify({
-                source: sourceLang,
-                target: targetLang
-            }));
-            
-            // Redirect to language page
-            window.location.href = `${page}.html`;
-        }
+        // Initialize theme toggle for the hub
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+        
+        // Initialize settings panel
+        document.getElementById('settings-btn').addEventListener('click', () => {
+            document.getElementById('settings-panel').classList.add('open');
+            document.getElementById('settings-overlay').classList.add('open');
+        });
+        
+        document.getElementById('close-settings').addEventListener('click', () => {
+            document.getElementById('settings-panel').classList.remove('open');
+            document.getElementById('settings-overlay').classList.remove('open');
+        });
+        
+        document.getElementById('settings-overlay').addEventListener('click', () => {
+            document.getElementById('settings-panel').classList.remove('open');
+            document.getElementById('settings-overlay').classList.remove('open');
+        });
+        
+        // Apply saved theme
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
     </script>
 </body>
 </html>
