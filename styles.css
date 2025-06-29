@@ -1137,13 +1137,11 @@ h2 {
     
     .mode-toggle {
         flex-direction: column;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
     }
     
     .mode-toggle-btn {
         width: 100%;
-        margin: 0;
+        justify-content: center;
     }
     
     #process-text, #clear-text, #show-history-btn {
