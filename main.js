@@ -1184,6 +1184,17 @@ document.getElementById('translate-input').addEventListener('input', updateTrans
     document.getElementById('process-text').addEventListener('click', processText);
     
     async function processText() {
+           // NEW CODE: Check if we're in "translate" mode
+    const isTranslateMode = document.getElementById('translate-container').style.display !== 'none';
+    if (isTranslateMode) {
+        const text = document.getElementById('translate-input').value.trim();
+        if (!text) {
+            showToast('Please enter some text', 'error');
+            return;
+        }
+        const translatedText = await translateSentence(text, 'es');
+        document.getElementById('text-input').value = translatedText;
+    }
         const text = document.getElementById('text-input').value.trim();
         if (!text) {
             showToast('Please enter some text', 'error');
