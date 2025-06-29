@@ -1214,19 +1214,7 @@ const LANGUAGES = {
 };
 
 // Core application state
-const state = {
-    currentView: 'text-import',
-    translatedText: '',
-    sentences: [],
-    currentSentenceIndex: 0,
-    vocabWords: [],
-    reviewMode: null,
-    reviewWords: [],
-    currentReviewIndex: 0,
-    reviewStats: {
-        correct: 0,
-        incorrect: 0
-    },
+
     theme: localStorage.getItem('theme') || 'dark',
     soundsEnabled: localStorage.getItem('soundsEnabled') !== 'false',
     audioContext: null,
