@@ -1170,7 +1170,9 @@ document.getElementById('settings-btn').addEventListener('click', () => {
 
 document.getElementById('close-settings').addEventListener('click', closeSettings);
 document.getElementById('settings-overlay').addEventListener('click', closeSettings);
-   
+ // Text input
+document.getElementById('text-input').addEventListener('input', updateCharCount);
+document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);  
     
     // Process text
     document.getElementById('process-text').addEventListener('click', processText);
