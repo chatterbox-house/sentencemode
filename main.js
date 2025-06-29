@@ -51,6 +51,8 @@ const state = {
     autoTranslate: localStorage.getItem('autoTranslate') === 'true',
     isOnline: navigator.onLine,
     uiLanguage: localStorage.getItem('uiLanguage') || 'en',
+        touchStartX: null,
+    touchStartY: null,
     
     // Content State
     sentences: [],
