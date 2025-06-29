@@ -1089,12 +1089,14 @@ function syncScroll(scrolledElement, otherElement) {
             }
         });
     });
-    
-    // Text input
-    document.getElementById('text-input').addEventListener('input', updateCharCount);
-    document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);
+ function updateCharCount() {
+    document.getElementById('char-count').textContent = document.getElementById('text-input').value.length;
+}
 
-    
+function updateTranslateCharCount() {
+    document.getElementById('translate-char-count').textContent = 
+        document.getElementById('translate-input').value.length;
+} 
 function shuffleArray(array) {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
