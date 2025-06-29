@@ -12,10 +12,10 @@
         <header>
             <div class="logo">JapLearner</div>
             <div class="nav-tabs">
-                <a href="index.html" class="nav-btn">Home</a>
                 <button class="nav-btn active" data-view="text-import" aria-label="Reader">Reader</button>
                 <button class="nav-btn" data-view="vocab-review" aria-label="Vocab">Vocab</button>
                 <button class="nav-btn" data-view="bookmarks-view" aria-label="Library">Library</button> 
+                <button class="nav-btn home-btn" onclick="window.location.href='index.html'" aria-label="Home">🏠</button>
             </div>
             <div>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
@@ -32,7 +32,6 @@
             
             <div class="settings-group">
                 <h3>Reading Settings</h3>
-                
                 <div class="settings-toggle">
                     <label class="toggle-switch">
                         <input type="checkbox" id="auto-translate-toggle">
@@ -68,10 +67,10 @@
             <div class="settings-group">
                 <h3>Progress</h3>
                 <div class="streak-display">
-                    <span class="streak-count" id="streak-count">0</span>
-                    <span class="streak-label">Day Streak</span>
-                    <span class="streak-count" id="daily-goal-count">0</span>
-                    <span class="streak-label">/5 today</span>
+                  <span class="streak-count" id="streak-count">0</span>
+                  <span class="streak-label">Day Streak</span>
+                  <span class="streak-count" id="daily-goal-count">0</span>
+                  <span class="streak-label">/5 today</span>
                 </div>
                 
                 <div class="stat-item">
@@ -142,7 +141,6 @@
                 <!-- Import Section -->
                 <div id="import-container" class="text-import-container" style="display: block;">
                     <h2>Import Japanese Text <span role="img" aria-label="Japanese">🇯🇵</span></h2>
-                    <!-- keep all your existing import content here -->
                 </div>
 
                 <!-- Translate Section -->
@@ -210,7 +208,9 @@
                     <button class="jump-btn" id="jump-btn">Go</button>
                 </div>
                 
-                <div class="sentence-display" id="sentence-display" aria-label="Current sentence">
+                <div class="sentence-display" id="sentence-display" aria-label="Current sentence" 
+                     ontouchstart="handleTouchStart(event)" 
+                     ontouchend="handleTouchEnd(event)">
                     Select text to begin reading
                     <button class="favorite-btn" id="favorite-sentence-btn" aria-label="Add to bookmarks">☆</button>
                 </div>
@@ -284,16 +284,14 @@
             </section>
             
             <section id="review-mode-view" class="view">
-                <button id="hide-header-btn" class="hide-header-btn">↑</button>
+                <button id="hide-header-btn" class="hide-header-btn" onclick="toggleHeaderVisibility()">↑</button>
                 <div class="review-container">
                     <div class="review-question" id="review-question"></div>
                     
                     <div id="matching-game-container" class="matching-game-container" style="display: none;">
                         <div class="matching-game-columns">
-                            <div class="matching-column" id="left-column">
-                            </div>
-                            <div class="matching-column" id="right-column">
-                            </div>
+                            <div class="matching-column" id="left-column"></div>
+                            <div class="matching-column" id="right-column"></div>
                         </div>
                         <button class="btn shuffle-btn" id="shuffle-cards" aria-label="Shuffle cards">Shuffle Cards</button>
                     </div>
@@ -357,6 +355,7 @@
                     Back to Text Import
                 </button>
             </section>
+
             <section id="bookmarks-view" class="view">
                 <h2>Saved Bookmarks</h2>
                 <p>Your favorite sentences and readings</p>
@@ -384,15 +383,9 @@
         
         <div class="toast" id="toast"></div>
         <div class="sound-toggle" id="sound-toggle" aria-label="Toggle sound">🔊</div>
-
         <div class="tooltip" id="word-tooltip"></div>
     </div>
-<script src="database.js"></script>
-<script src="main.js"></script>
-<script src="language-manager.js"></script>
-<script src="utilities.js"></script>
-<script src="review-system.js"></script>
-<script src="audio-manager.js"></script>
-<script src="ui-manager.js"></script>
+
+    <script src="main.js"></script>
 </body>
 </html>
