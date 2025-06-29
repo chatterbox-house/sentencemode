@@ -1983,7 +1983,7 @@ async function initApp() {
             showToast('Failed to initialize app. Please refresh the page.', 'error');
         }
     }
-}
+
 
 // Start the app when DOM is loaded
 window.addEventListener('DOMContentLoaded', initApp);
