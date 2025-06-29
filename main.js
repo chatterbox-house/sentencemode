@@ -1072,7 +1072,28 @@ function syncScroll(scrolledElement, otherElement) {
 /* ========================
    UTILITY FUNCTIONS
    ======================== */
-
+    function closeSettings() {
+        document.getElementById('settings-panel').classList.remove('open');
+        document.getElementById('settings-overlay').classList.remove('open');
+    }
+    
+    // Navigation
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            showView(btn.dataset.view + '-view');
+            
+            if (btn.dataset.view === 'bookmarks') {
+                renderBookmarks();
+            }
+        });
+    });
+    
+    // Text input
+    document.getElementById('text-input').addEventListener('input', updateCharCount);
+    document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);
+    
 function shuffleArray(array) {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -1146,28 +1167,6 @@ function setupEventListeners() {
     
     document.getElementById('close-settings').addEventListener('click', closeSettings);
     document.getElementById('settings-overlay').addEventListener('click', closeSettings);
-    
-    function closeSettings() {
-        document.getElementById('settings-panel').classList.remove('open');
-        document.getElementById('settings-overlay').classList.remove('open');
-    }
-    
-    // Navigation
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            showView(btn.dataset.view + '-view');
-            
-            if (btn.dataset.view === 'bookmarks') {
-                renderBookmarks();
-            }
-        });
-    });
-    
-    // Text input
-    document.getElementById('text-input').addEventListener('input', updateCharCount);
-    document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);
     
     function updateCharCount() {
         document.getElementById('char-count').textContent = document.getElementById('text-input').value.length;
