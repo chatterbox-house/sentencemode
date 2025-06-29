@@ -1274,7 +1274,21 @@ document.getElementById('translate-to-japanese').addEventListener('click', async
             document.getElementById('char-count').textContent = translatedText.length;
             
             // Switch back to import view
-            document.querySelector('.mode-toggle-btn[data-mode="import"]').click();
+// Mode toggle functionality
+document.querySelectorAll('.mode-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        if (btn.dataset.mode === 'import') {
+            document.getElementById('import-container').style.display = 'block';
+            document.getElementById('translate-container').style.display = 'none';
+        } else {
+            document.getElementById('import-container').style.display = 'none';
+            document.getElementById('translate-container').style.display = 'block';
+        }
+    });
+});
             showToast('Translation complete! Paste or edit before processing', 'success');
         }
     } finally {
