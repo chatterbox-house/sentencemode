@@ -1547,22 +1547,7 @@ async function initApp() {
 }
 
 // Event listeners
-function setupEventListeners() {
-    // Language selection
-    document.querySelectorAll('.lang-selector').forEach(selector => {
-        selector.addEventListener('change', (e) => {
-            if (selector.id === 'source-lang') {
-                state.sourceLanguage = e.target.value;
-            } else if (selector.id === 'target-lang') {
-                state.targetLanguage = e.target.value;
-            }
-            localStorage.setItem('languageSettings', JSON.stringify({
-                source: state.sourceLanguage,
-                target: state.targetLanguage
-            }));
-            updateLanguageUI();
-        });
-    });
+
 // ==============================================
 // Audio Functions
 // ==============================================
@@ -1910,6 +1895,21 @@ function startVoiceInput(lang, targetId, buttonElement) {
 // ==============================================
 
 function setupEventListeners() {
+        // Language selection
+    document.querySelectorAll('.lang-selector').forEach(selector => {
+        selector.addEventListener('change', (e) => {
+            if (selector.id === 'source-lang') {
+                state.sourceLanguage = e.target.value;
+            } else if (selector.id === 'target-lang') {
+                state.targetLanguage = e.target.value;
+            }
+            localStorage.setItem('languageSettings', JSON.stringify({
+                source: state.sourceLanguage,
+                target: state.targetLanguage
+            }));
+            updateLanguageUI();
+        });
+    });
     // Theme toggle
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
     
@@ -1979,7 +1979,7 @@ async function initApp() {
     } catch (error) {
         console.error('Initialization error:', error);
         showToast('Failed to initialize app', 'error');
-        
+        }
         // Try to recover by deleting and recreating the database
         try {
             if (db) db.close();
