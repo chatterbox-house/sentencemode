@@ -48,7 +48,7 @@ const state = {
     wordLookupCache: {},
     bookmarks: JSON.parse(localStorage.getItem('bookmarks')) || []
 };
-
+const translationAPI = 'https://api.mymemory.translated.net/get';
 const languageConfig = {
     ja: {
         ttsLang: 'ja-JP',
@@ -139,7 +139,22 @@ en: {  // For English-for-Japanese
 /* ========================
    CORE FUNCTIONALITY
    ======================== */
-
+// Add this function to handle translation
+async function translateText(text, fromLang, toLang) {
+    try {
+        const response = await fetch(`${translationAPI}?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`);
+        const data = await response.json();
+        
+        if (data.responseData) {
+            return data.responseData.translatedText;
+        }
+        throw new Error('Translation failed');
+    } catch (error) {
+        console.error('Translation error:', error);
+        showToast('Translation service unavailable', 'error');
+        return null;
+    }
+}
 // Initialize the application
 async function initApp() {
     try {
@@ -1240,7 +1255,33 @@ document.getElementById('close-settings').addEventListener('click', toggleSettin
 document.getElementById('settings-overlay').addEventListener('click', toggleSettings);
  // Text input
 document.getElementById('text-input').addEventListener('input', updateCharCount);
-document.getElementById('translate-input').addEventListener('input', updateTranslateCharCount);  
+document.getElementById('translate-to-japanese').addEventListener('click', async () => {
+    const text = document.getElementById('translate-input').value.trim();
+    if (!text) {
+        showToast('Please enter some text to translate', 'error');
+        return;
+    }
+
+    const button = document.getElementById('translate-to-japanese');
+    button.innerHTML = 'Translating... <span class="loading-spinner"></span>';
+    button.disabled = true;
+
+    try {
+        const translatedText = await translateText(text, 'en', 'ja');
+        if (translatedText) {
+            // Auto-fill the Japanese import field with the translation
+            document.getElementById('text-input').value = translatedText;
+            document.getElementById('char-count').textContent = translatedText.length;
+            
+            // Switch back to import view
+            document.querySelector('.mode-toggle-btn[data-mode="import"]').click();
+            showToast('Translation complete! Paste or edit before processing', 'success');
+        }
+    } finally {
+        button.innerHTML = 'Translate to Japanese';
+        button.disabled = false;
+    }
+}); 
     
     // Process text
     document.getElementById('process-text').addEventListener('click', processText);
