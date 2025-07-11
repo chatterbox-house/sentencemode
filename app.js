@@ -1,11 +1,16 @@
 // Add at top of file:
-let scrollListeners = [];
+let scrollListeners = new WeakMap();
 
 function cleanupScrollListeners() {
-    scrollListeners.forEach(({element, handler}) => {
-        element.removeEventListener('scroll', handler);
-    });
-    scrollListeners = [];
+    // WeakMap automatically cleans up when elements are removed
+    scrollListeners = new WeakMap();
+}
+
+function addScrollListener(element, handler) {
+    if (!scrollListeners.has(element)) {
+        scrollListeners.set(element, handler);
+        element.addEventListener('scroll', handler);
+    }
 }
 // RSS Feed functionality
 document.querySelectorAll('.rss-feed').forEach(feed => {
@@ -14,6 +19,14 @@ document.querySelectorAll('.rss-feed').forEach(feed => {
         if (feed.hasAttribute('data-url')) {
             e.preventDefault();
             loadRSSFeed(feed);
+        }
+        // Special case for NHK News link
+        else if (feed.href.includes('nhk.or.jp')) {
+            e.preventDefault();
+            const nhkFeed = document.createElement('div');
+            nhkFeed.setAttribute('data-url', 'https://www3.nhk.or.jp/rss/news/cat0.xml');
+            nhkFeed.setAttribute('data-name', 'NHK News');
+            loadRSSFeed(nhkFeed);
         }
         // Otherwise it's a direct link and will navigate normally
     });
@@ -84,16 +97,24 @@ const proxyUrls = [
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
         
-        // Extract articles
-        const items = xmlDoc.querySelectorAll('item');
-        if (items.length === 0) throw new Error('No articles found in feed');
-        
-        // Display articles
-        const resultsList = document.getElementById('rss-results-list');
-        resultsList.innerHTML = '';
-        
-        items.forEach((item, index) => {
-            if (index >= 10) return; // Limit to 10 articles
+// Extract articles and convert to array
+const items = Array.from(xmlDoc.querySelectorAll('item'));
+if (items.length === 0) throw new Error('No articles found in feed');
+
+// Sort items by date (newest first)
+items.sort((a, b) => {
+    const dateA = new Date(a.querySelector('pubDate')?.textContent || 
+                 a.querySelector('date')?.textContent || 0);
+    const dateB = new Date(b.querySelector('pubDate')?.textContent || 
+                 b.querySelector('date')?.textContent || 0);
+    return dateB - dateA;
+});
+
+// Display articles
+const resultsList = document.getElementById('rss-results-list');
+resultsList.innerHTML = '';
+
+items.slice(0, 10).forEach((item) => {  // Still limit to 10 articles
             
             const title = item.querySelector('title')?.textContent || 'No title';
             let description = item.querySelector('description')?.textContent || '';
@@ -1577,25 +1598,18 @@ function countVocabByBucket() {
 
 // Text processing
 function splitSentences(text) {
-    const roughSentences = text.split(/(?<=[。！？\n])/);
-    const sentences = [];
+    const SPLIT_REGEX = /(?<=[。！？\n]|[\u3002\uff01\uff1f])/;
+    const sentences = text.split(SPLIT_REGEX)
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
     
-    roughSentences.forEach(roughSentence => {
-        const trimmed = roughSentence.trim();
-        if (trimmed.length === 0) return;
-        
-        if (trimmed.includes('。') || trimmed.includes('！') || trimmed.includes('？')) {
-            const subSentences = trimmed.split(/(?<=[。！？])/);
-            subSentences.forEach(sub => {
-                const subTrimmed = sub.trim();
-                if (subTrimmed.length > 0) sentences.push(subTrimmed);
-            });
-        } else {
-            sentences.push(trimmed);
+    // Further split long sentences
+    return sentences.flatMap(sentence => {
+        if (sentence.length > 100) {
+            return sentence.split(/(?<=[、,])/).map(s => s.trim()).filter(s => s);
         }
+        return sentence;
     });
-    
-    return sentences;
 }
 
 function detectLanguage(text) {
