@@ -500,15 +500,89 @@ lastSentencePosition: JSON.parse(localStorage.getItem('lastSentencePosition_ja')
         {id: '20', url: 'https://aijapanesetext.blogspot.com/2025/06/chapter-20.html', title: 'Chapter 20', date: new Date().toISOString()}
     ]
 };
+
 // Initialize database when page loads
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         db = await openDatabase();
-        updateVocabTabCounter(); // Now this will work
+        updateVocabTabCounter();
     } catch (error) {
         console.error('Failed to initialize database:', error);
+        
+        // Fallback to localStorage if IndexedDB fails
+        try {
+            const backup = localStorage.getItem('vocab_backup');
+            if (backup) {
+                state.vocabWords = JSON.parse(backup);
+                updateBucketCounts();
+                showToast('Loaded vocabulary from backup', 'warning');
+            }
+        } catch (fallbackError) {
+            console.error('Fallback failed:', fallbackError);
+        }
     }
 });
+
+// Add this function
+function createDailyBackup() {
+    try {
+        // Only backup once per day
+        const today = new Date().toDateString();
+        const lastBackupDate = localStorage.getItem('lastBackupDate');
+        
+        if (lastBackupDate !== today) {
+            getAllVocabWords().then(words => {
+                localStorage.setItem('vocab_backup', JSON.stringify(words));
+                localStorage.setItem('lastBackupDate', today);
+            });
+        }
+    } catch (error) {
+        console.error('Backup failed:', error);
+    }
+}
+
+// Call this in initApp
+async function initApp() {
+    // ... existing code ...
+    createDailyBackup(); // Add this line
+    // ... existing code ...
+}
+
+// Also add to addVocabWord after successful addition:
+async function addVocabWord(word) {
+    return new Promise((resolve, reject) => {
+        try {
+            if (!db) {
+                throw new Error('Database not initialized');
+            }
+            
+            const transaction = db.transaction([STORE_VOCAB], 'readwrite');
+            const store = transaction.objectStore(STORE_VOCAB);
+            const wordIndex = store.index('word');
+            const request = wordIndex.get(word.word);
+            
+            request.onsuccess = () => {
+                if (request.result) {
+                    reject(new Error('Word already exists in vocabulary'));
+                } else {
+                    const addRequest = store.add(word);
+                    addRequest.onsuccess = async () => {
+                        // Add backup after successful addition
+                        const words = await getAllVocabWords();
+                        localStorage.setItem('vocab_backup', JSON.stringify(words));
+                        resolve();
+                    };
+                    addRequest.onerror = (event) => reject(event.target.error);
+                }
+            };
+            request.onerror = (event) => reject(event.target.error);
+        } catch (error) {
+            console.error('Add vocab word error:', error);
+            reject(error);
+        }
+    });
+}
+
 // Initialize audio context and sounds
 function initAudio() {
     try {
@@ -1492,59 +1566,6 @@ function updateSentence(sentence) {
     });
 }
 
-function addVocabWord(word) {
-    return new Promise((resolve, reject) => {
-        try {
-            if (!db) {
-                throw new Error('Database not initialized');
-            }
-            
-            const transaction = db.transaction([STORE_VOCAB], 'readwrite');
-            transaction.onerror = (event) => {
-                console.error('Transaction error:', event.target.error);
-                reject(new Error('Database transaction failed'));
-            };
-            
-            const store = transaction.objectStore(STORE_VOCAB);
-            const wordIndex = store.index('word');
-            const request = wordIndex.get(word.word);
-            
-            request.onerror = (event) => {
-                console.error('Word check error:', event.target.error);
-                reject(event.target.error);
-            };
-            
-            request.onsuccess = () => {
-                if (request.result) {
-                    reject(new Error('Word already exists in vocabulary'));
-                } else {
-                // Track new words added today
-                const today = new Date().toDateString();
-                if (state.lastWordAddedDate !== today) {
-                    state.newWordsToday = 0;
-                    state.lastWordAddedDate = today;
-                }
-                state.newWordsToday++;
-                localStorage.setItem('newWordsToday_ja', state.newWordsToday.toString());
-                localStorage.setItem('lastWordAddedDate_ja', state.lastWordAddedDate);
-                
-                // Update reading stats
-                state.readingStats.wordsLearned++;
-                state.readingStats.dailyWords++;
-                localStorage.setItem('readingStats_ja', JSON.stringify(state.readingStats));
-                updateStatsDisplay();
-                
-                const addRequest = store.add(word);
-                addRequest.onsuccess = () => resolve();
-                addRequest.onerror = (event) => reject(event.target.error);
-            }
-        };
-        } catch (error) {
-            console.error('Add vocab word error:', error);
-            reject(error);
-        }
-    });
-}
 function getVocabByBucket(bucket) {
     return new Promise((resolve, reject) => {
         const transaction = db.transaction([STORE_VOCAB], 'readonly');
