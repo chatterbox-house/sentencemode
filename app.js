@@ -3759,6 +3759,9 @@ if (state.currentView === 'review-mode-view' && state.reviewMode === 'hard') {
 }
 async function initApp() {
     try {
+        if (!db || db.version !== DB_VERSION) {
+            db = await openDatabase();
+        }
         // First verify database integrity
         const dbValid = await verifyDatabaseIntegrity();
         if (!dbValid) {
@@ -3860,9 +3863,13 @@ await restoreVocabFromLocalStorage();
 async function backupVocabToLocalStorage() {
     try {
         const vocab = await getAllVocabWords();
-        localStorage.setItem('vocab_backup', JSON.stringify(vocab));
-        console.log('Vocab backed up to localStorage');
-        return true;
+        // Only backup if we have words
+        if (vocab.length > 0) {
+            localStorage.setItem('vocab_backup', JSON.stringify(vocab));
+            console.log(`Backed up ${vocab.length} words to localStorage`);
+            return true;
+        }
+        return false;
     } catch (error) {
         console.error('Failed to backup vocab:', error);
         return false;
