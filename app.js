@@ -1,4 +1,4 @@
-// Add at top of file:
+ // Add at top of file:
 let scrollListeners = new WeakMap();
 
 function cleanupScrollListeners() {
@@ -541,13 +541,6 @@ function createDailyBackup() {
     }
 }
 
-// Call this in initApp
-async function initApp() {
-    // ... existing code ...
-    createDailyBackup(); // Add this line
-    // ... existing code ...
-}
-
 // Also add to addVocabWord after successful addition:
 async function addVocabWord(word) {
     return new Promise((resolve, reject) => {
@@ -568,8 +561,7 @@ async function addVocabWord(word) {
                     const addRequest = store.add(word);
                     addRequest.onsuccess = async () => {
                         // Add backup after successful addition
-                        const words = await getAllVocabWords();
-                        localStorage.setItem('vocab_backup', JSON.stringify(words));
+                        await backupVocabToLocalStorage();  // <-- ADD THIS LINE
                         resolve();
                     };
                     addRequest.onerror = (event) => reject(event.target.error);
@@ -3765,7 +3757,6 @@ if (state.currentView === 'review-mode-view' && state.reviewMode === 'hard') {
         elements.offlineWarning.style.display = 'block';
     });
 }
-
 async function initApp() {
     try {
         // First verify database integrity
@@ -3777,11 +3768,7 @@ async function initApp() {
         // Load initial data
         state.sentences = await getAllSentences();
         await updateBucketCounts();
-        
-        // Set up UI
-        document.querySelector('.nav-btn[data-view="text-import"]').classList.add('active');
-        document.querySelector('.nav-btn[data-view="vocab-review"]').classList.remove('active');
-        showView('text-import-view');
+await restoreVocabFromLocalStorage();
         
         // Apply theme and settings
         document.documentElement.setAttribute('data-theme', state.theme);
@@ -3868,6 +3855,8 @@ async function initApp() {
         }
     }
 }
+
+// Add these functions to your code
 async function backupVocabToLocalStorage() {
     try {
         const vocab = await getAllVocabWords();
